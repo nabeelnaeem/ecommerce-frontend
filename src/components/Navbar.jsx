@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
     return (
-        <nav>
+        <nav className="flex flex-row gap-4">
             <ul className=" flex space-x-4">
                 <li>
                     <Link to="/" className=" hover:underline">Home</Link>
