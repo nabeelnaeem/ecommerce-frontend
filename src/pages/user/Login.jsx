@@ -8,7 +8,7 @@ const Login = () => {
     //classNames
     const INPUT_LABEL_CLASS = "block mb-1";
     const INPUT_CLASS = "w-full border border-gray-50-300 p-2";
-    const BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
+    const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
     const SIGNUP_CLASS = "text-blue-600 hover:underline";
     //variables
 
@@ -45,7 +45,7 @@ const Login = () => {
                 </div>
                 <button
                     type="submit"
-                    className={BUTTON_CLASS}
+                    className={LOGIN_BUTTON_CLASS}
                 >
                     Login
                 </button>
