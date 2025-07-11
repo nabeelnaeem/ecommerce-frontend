@@ -5,10 +5,14 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const handleLogin = (e) => {
+        e.preventDefault();
+        console.log("Logging in with", username, password);
+    };
     return (
         <div className=" max-w-md mx-auto p-6">
             <h2 className=" text-xl font-semibold mb-4">Login</h2>
-            <form className=" space-y-4">
+            <form className=" space-y-4" onSubmit={handleLogin}>
                 <div>
                     <label className=" block mb-1">User Name:</label>
                     <input
