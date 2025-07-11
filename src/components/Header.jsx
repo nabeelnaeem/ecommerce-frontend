@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Navbar from "./Navbar.jsx";
 
 const Header = () => {
     return (
@@ -8,7 +9,7 @@ const Header = () => {
                 <Link to="/">Ecommerce Store</Link>
             </h1>
             {/*Navigation Links*/}
-
+            <Navbar />
             {/* Login Button */}
             <Link to="/login" className=" bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">
                 Login
@@ -16,3 +17,5 @@ const Header = () => {
         </header>
     )
 }
+
+export default Header; 
