@@ -11,7 +11,7 @@ const Login = () => {
     const TITLE_CLASS = " text-xl font-semibold mb-4";
     const CLASS_SPACE_Y4 = " space-y-4";
     const INPUT_LABEL_CLASS = "block mb-1";
-    const INPUT_CLASS = "w-full border border-gray-50-300 p-2";
+    const INPUT_CLASS = "w-full border border-gray-300 p-2";
     const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
     const SIGNUP_CLASS = "text-blue-600 hover:underline";
     const PARAGRAPH_CLASS = "mt-4 text-center";
