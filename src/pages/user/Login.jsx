@@ -47,7 +47,7 @@ const Login = () => {
             navigate("/"); // Redirect to homepage
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.error || { LOGIN_FAILED_MSG });
+            setError(err.response?.data?.error || LOGIN_FAILED_MSG);
         }
     };
 

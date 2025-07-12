@@ -40,7 +40,7 @@ const Signup = () => {
             navigate("/login");
         } catch (error) {
             console.error(err);
-            setError(err.response?.data?.error || { SIGNUP_FAILED_MSG });
+            setError(err.response?.data?.error || SIGNUP_FAILED_MSG);
         }
     };
 
