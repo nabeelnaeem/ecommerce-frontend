@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/api"
+import api from "../../api/api";
+import { useAuth } from "../../context/AuthContext.jsx";
+
 
 const Login = () => {
     //Messages
@@ -27,7 +29,7 @@ const Login = () => {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
-
+    const { login } = useAuth();
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
@@ -40,7 +42,7 @@ const Login = () => {
 
             const { token } = res.data;
             localStorage.setItem("token", token); // Save JWT
-
+            login(username);
             alert(LOGIN_SUCCESS_MSG);
             navigate("/"); // Redirect to homepage
         } catch (err) {
