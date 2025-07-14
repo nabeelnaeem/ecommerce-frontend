@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api"
+import InputField from "../../components/InputField.jsx"
 
 const Signup = () => {
     //Class Names
     const CONTAINER_DIV_CLASS = " max-w-md mx-auto p-6";
     const TITLE_CLASS = " text-xl font-semibold mb-4";
-    const INPUT_LABEL_CLASS = "block mb-1";
-    const INPUT_CLASS = "w-full border border-gray-300 p-2";
     const SIGNUP_BUTTON_CLASS = "w-full bg-green-600 text-white py-2 rounded hover:bg-green-500";
     const LOGIN_LINK_CLASS = "text-blue-600 hover:underline";
     const CLASS_SPACE_Y4 = " space-y-4";
@@ -49,33 +48,28 @@ const Signup = () => {
             <h2 className={TITLE_CLASS}>Sign Up</h2>
             {error && <p className={ERROR_CLASS}>{error}</p>}
             <form onSubmit={handleSignup} className={CLASS_SPACE_Y4}>
-                <div>
-                    <label className={INPUT_LABEL_CLASS}>User Name: </label>
-                    <input type="text"
-                        className={INPUT_CLASS}
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label className={INPUT_LABEL_CLASS}>Email: </label>
-                    <input type="email"
-                        className={INPUT_CLASS}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label className={INPUT_LABEL_CLASS}>Password: </label>
-                    <input type="password"
-                        className={INPUT_CLASS}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
+
+                <InputField
+                    type="text"
+                    placeholder="User Name"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                >
+                </InputField>
+                <InputField
+                    placeholder="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                >
+                </InputField>
+                <InputField
+                    placeholder="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                >
+                </InputField>
                 <button
                     type="submit"
                     className={SIGNUP_BUTTON_CLASS}
