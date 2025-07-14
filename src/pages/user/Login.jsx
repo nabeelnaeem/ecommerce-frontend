@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import { useAuth } from "../../context/AuthContext.jsx";
-
+import InputField from "../../components/InputField.jsx"
 
 const Login = () => {
     //Messages
@@ -12,8 +12,6 @@ const Login = () => {
     const CONTAINER_DIV_CLASS = " max-w-md mx-auto p-6";
     const TITLE_CLASS = " text-xl font-semibold mb-4";
     const CLASS_SPACE_Y4 = " space-y-4";
-    const INPUT_LABEL_CLASS = "block mb-1";
-    const INPUT_CLASS = "w-full border border-gray-300 p-2";
     const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
     const SIGNUP_CLASS = "text-blue-600 hover:underline";
     const PARAGRAPH_CLASS = "mt-4 text-center";
@@ -57,26 +55,25 @@ const Login = () => {
             <h2 className={TITLE_CLASS}>Login</h2>
             {error && <p className={ERROR_CLASS}>{error}</p>}
             <form className={CLASS_SPACE_Y4} onSubmit={handleLogin}>
-                <div>
-                    <label className={INPUT_LABEL_CLASS}>User Name:</label>
-                    <input
-                        type="text"
-                        className={INPUT_CLASS}
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label className={INPUT_LABEL_CLASS}>Password:</label>
-                    <input
-                        type="password"
-                        className={INPUT_CLASS}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
+
+                <InputField
+                    type="text"
+                    placeholder="User Name"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                >
+
+                </InputField>
+
+                <InputField
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                >
+                </InputField>
                 <button
                     type="submit"
                     className={LOGIN_BUTTON_CLASS}
