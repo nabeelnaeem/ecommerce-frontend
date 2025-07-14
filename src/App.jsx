@@ -6,15 +6,24 @@ import Login from "./pages/user/Login.jsx";
 import Signup from "./pages/user/Signup.jsx";
 
 const App = () => {
+  const MAIN_CONTAINER_CLASS = "flex flex-col min-h-screen";
+  const FLEX_GROW_CLASS = "flex-grow";
+
+
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-      <Footer />
+      <div className={MAIN_CONTAINER_CLASS}>
+        <Header />
+
+        <div className={FLEX_GROW_CLASS}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }
