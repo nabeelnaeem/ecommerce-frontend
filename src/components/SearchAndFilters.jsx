@@ -2,6 +2,14 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import { INPUT_CLASS, SELECT_CLASS } from '../styles/styles';
 
+// Search and Filters Classes
+const CONTAINER_CLASS = "mb-6 bg-white p-4 rounded-lg shadow-sm border";
+const LAYOUT_CLASS = "flex flex-col lg:flex-row gap-4 items-center";
+const SEARCH_FORM_CLASS = "flex-1";
+const SEARCH_CONTAINER_CLASS = "relative";
+const SEARCH_ICON_CLASS = "absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5";
+const FILTERS_CONTAINER_CLASS = "flex gap-2 flex-wrap";
+
 const SearchAndFilters = ({
     searchTerm,
     setSearchTerm,
@@ -14,12 +22,12 @@ const SearchAndFilters = ({
     handleSearch
 }) => {
     return (
-        <div className="mb-6 bg-white p-4 rounded-lg shadow-sm border">
-            <div className="flex flex-col lg:flex-row gap-4 items-center">
+        <div className={CONTAINER_CLASS}>
+            <div className={LAYOUT_CLASS}>
                 {/* Search */}
-                <form onSubmit={handleSearch} className="flex-1">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <form onSubmit={handleSearch} className={SEARCH_FORM_CLASS}>
+                    <div className={SEARCH_CONTAINER_CLASS}>
+                        <Search className={SEARCH_ICON_CLASS} />
                         <input
                             type="text"
                             placeholder="Search products..."
@@ -31,7 +39,7 @@ const SearchAndFilters = ({
                 </form>
 
                 {/* Sort Controls */}
-                <div className="flex gap-2 flex-wrap">
+                <div className={FILTERS_CONTAINER_CLASS}>
                     <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
@@ -41,6 +49,7 @@ const SearchAndFilters = ({
                         <option value="price">Sort by Price</option>
                         <option value="stock">Sort by Stock</option>
                         <option value="createdAt">Sort by Date</option>
+                        <option value="rating">Sort by Rating</option>
                     </select>
 
                     <select

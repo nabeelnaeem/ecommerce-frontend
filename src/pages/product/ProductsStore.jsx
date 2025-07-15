@@ -21,10 +21,8 @@ const ProductsStore = () => {
     const [totalProducts, setTotalProducts] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
 
-    // API base URL - adjust this to match your backend
-    const API_BASE_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-    // Fetch products from API
     const fetchProducts = async () => {
         setLoading(true);
         setError(null);
