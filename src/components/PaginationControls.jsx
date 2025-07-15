@@ -139,5 +139,4 @@ const PaginationControls = ({
         </div>
     );
 };
-
 export default PaginationControls;
