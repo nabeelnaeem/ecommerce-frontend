@@ -12,18 +12,24 @@ const Signup = () => {
     const LOGIN_LINK_CLASS = "text-blue-600 hover:underline";
     const CLASS_SPACE_Y4 = " space-y-4";
     const PARAGRAPH_CLASS = "mt-4 text-center";
-
+    const USERNAME_VALIDATION__ERROR_MESSAGE = "Username must contain only letters."
     const SIGNUP_FAILED_MSG = "Signup failed";
-    const SIGNING_UP_WITH = "Signing up with";
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
+    const usernameValidation = /^[a-zA-Z]+$/;
+
     const handleSignup = async (e) => {
         e.preventDefault();
-        console.log({ SIGNING_UP_WITH }, username, email, password);
+
+        if (!usernameValidation.test(username)) {
+            toast.error(USERNAME_VALIDATION__ERROR_MESSAGE);
+            return;
+        }
+
         try {
             const res = await api.post("/auth/signup", {
                 username,
