@@ -25,7 +25,7 @@ const Header = () => {
             <Navbar />
             {user ? (
                 <div className={USERNAME_CLASS}>
-                    <span>Hello, {user}</span>
+                    <span>Hello, {user.charAt(0).toUpperCase() + user.slice(1).split(',', 1)}</span>
                     <button
                         onClick={logout}
                         className={LOGOUT_BUTTON_CLASS}
