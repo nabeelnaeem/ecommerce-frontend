@@ -2,6 +2,19 @@ import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BUTTON_CLASS, BUTTON_DISABLED, BUTTON_SECONDARY } from '../styles/styles.js';
 
+// Pagination Container Styles
+const PAGINATION_CONTAINER = "bg-white p-4 rounded-lg shadow-sm border";
+const PAGINATION_LAYOUT = "flex flex-col sm:flex-row items-center justify-between gap-4";
+const PAGE_INFO_TEXT = "text-sm text-gray-700";
+const PAGINATION_CONTROLS = "flex items-center gap-2";
+const PAGE_NUMBERS_CONTAINER = "hidden sm:flex items-center gap-1";
+const ELLIPSIS_STYLE = "px-2 py-2 text-gray-500";
+const ACTIVE_PAGE_STYLE = "bg-blue-600 text-white shadow-md";
+const MOBILE_PAGE_INFO = "sm:hidden px-3 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg";
+const PAGE_JUMP_CONTAINER = "flex items-center gap-2";
+const PAGE_INPUT = "w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm focus:ring-2 focus:ring-blue-500";
+const NAV_BUTTON = "flex items-center gap-1";
+const CHEVRON_ICON = "w-4 h-4";
 
 const PaginationControls = ({
     currentPage,
@@ -28,28 +41,27 @@ const PaginationControls = ({
     };
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className={PAGINATION_CONTAINER}>
+            <div className={PAGINATION_LAYOUT}>
                 {/* Page Info */}
-                <div className="text-sm text-gray-700">
+                <div className={PAGE_INFO_TEXT}>
                     Showing {((currentPage - 1) * limit) + 1} to {Math.min(currentPage * limit, totalProducts)} of {totalProducts} results
                 </div>
 
                 {/* Pagination Controls */}
-                <div className="flex items-center gap-2">
+                <div className={PAGINATION_CONTROLS}>
                     {/* Previous Button */}
                     <button
                         onClick={() => onPageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`${BUTTON_CLASS} flex items-center gap-1 ${currentPage === 1 ? BUTTON_DISABLED : BUTTON_SECONDARY
-                            }`}
+                        className={`${BUTTON_CLASS} ${NAV_BUTTON} ${currentPage === 1 ? BUTTON_DISABLED : BUTTON_SECONDARY}`}
                     >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className={CHEVRON_ICON} />
                         Previous
                     </button>
 
                     {/* Page Numbers */}
-                    <div className="hidden sm:flex items-center gap-1">
+                    <div className={PAGE_NUMBERS_CONTAINER}>
                         {currentPage > 3 && (
                             <>
                                 <button
@@ -59,7 +71,7 @@ const PaginationControls = ({
                                     1
                                 </button>
                                 {currentPage > 4 && (
-                                    <span className="px-2 py-2 text-gray-500">...</span>
+                                    <span className={ELLIPSIS_STYLE}>...</span>
                                 )}
                             </>
                         )}
@@ -68,10 +80,7 @@ const PaginationControls = ({
                             <button
                                 key={page}
                                 onClick={() => onPageChange(page)}
-                                className={`${BUTTON_CLASS} ${currentPage === page
-                                    ? 'bg-blue-600 text-white shadow-md'
-                                    : BUTTON_SECONDARY
-                                    }`}
+                                className={`${BUTTON_CLASS} ${currentPage === page ? ACTIVE_PAGE_STYLE : BUTTON_SECONDARY}`}
                             >
                                 {page}
                             </button>
@@ -80,7 +89,7 @@ const PaginationControls = ({
                         {currentPage < totalPages - 2 && (
                             <>
                                 {currentPage < totalPages - 3 && (
-                                    <span className="px-2 py-2 text-gray-500">...</span>
+                                    <span className={ELLIPSIS_STYLE}>...</span>
                                 )}
                                 <button
                                     onClick={() => onPageChange(totalPages)}
@@ -93,7 +102,7 @@ const PaginationControls = ({
                     </div>
 
                     {/* Mobile: Show current page info */}
-                    <div className="sm:hidden px-3 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg">
+                    <div className={MOBILE_PAGE_INFO}>
                         {currentPage} of {totalPages}
                     </div>
 
@@ -101,17 +110,16 @@ const PaginationControls = ({
                     <button
                         onClick={() => onPageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className={`${BUTTON_CLASS} flex items-center gap-1 ${currentPage === totalPages ? BUTTON_DISABLED : BUTTON_SECONDARY
-                            }`}
+                        className={`${BUTTON_CLASS} ${NAV_BUTTON} ${currentPage === totalPages ? BUTTON_DISABLED : BUTTON_SECONDARY}`}
                     >
                         Next
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className={CHEVRON_ICON} />
                     </button>
                 </div>
 
                 {/* Page Jump */}
-                <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-700">Go to page:</span>
+                <div className={PAGE_JUMP_CONTAINER}>
+                    <span className={PAGE_INFO_TEXT}>Go to page:</span>
                     <input
                         type="number"
                         min="1"
@@ -123,9 +131,9 @@ const PaginationControls = ({
                                 onPageChange(page);
                             }
                         }}
-                        className="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm focus:ring-2 focus:ring-blue-500"
+                        className={PAGE_INPUT}
                     />
-                    <span className="text-sm text-gray-700">of {totalPages}</span>
+                    <span className={PAGE_INFO_TEXT}>of {totalPages}</span>
                 </div>
             </div>
         </div>
