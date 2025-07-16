@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, ShoppingCart } from 'lucide-react';
 import { BUTTON_PRIMARY, BUTTON_DISABLED, CARD_CLASS } from '../styles/styles';
 import RenderStars from './RenderStars.jsx';
+import { Link } from 'react-router-dom';
 
 // Product Card Classes
 const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
@@ -55,18 +56,12 @@ const ProductCard = ({ product, onAddToCart }) => {
 
             {/* Product Info */}
             <div className={PRODUCT_INFO_CONTAINER}>
-                <a
-                    href={`/products/${product.product_id}`}
-                    className={PRODUCT_TITLE_LINK}
-                >
-                    <h3 className={PRODUCT_TITLE} style={{
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
-                    }}>
+
+                <Link to={`/products/${product.product_id}`}>
+                    <h3 className={PRODUCT_TITLE}>
                         {product.name}
                     </h3>
-                </a>
+                </Link>
 
                 {/* Rating */}
                 <div className="mb-2">
@@ -119,7 +114,7 @@ const ProductCard = ({ product, onAddToCart }) => {
                     Add to Cart
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 

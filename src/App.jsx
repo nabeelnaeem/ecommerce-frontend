@@ -24,7 +24,6 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/products" element={<ProductsStore />} />
             <Route path="/products/:id" element={<ProductDetail />} />
-
           </Routes>
         </div>
         <Footer />
