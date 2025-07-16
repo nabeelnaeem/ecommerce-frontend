@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
             const username = res.data.message.split(" ")[1];
             setUser(username);
         } catch (err) {
-            console.log("Not Authenticated");
             setUser(null);
         } finally {
             setLoading(false);
