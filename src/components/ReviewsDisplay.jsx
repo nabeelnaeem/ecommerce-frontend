@@ -51,7 +51,7 @@ const ReviewsDisplay = ({ rating, reviews }) => {
                     {reviews.map((review) => (
                         <li key={review.review_id} className={REVIEW_ITEM}>
                             <div className={REVIEW_HEADER}>
-                                <p className={FONT_SEMIBOLD}>{review.username}</p>
+                                <p className={FONT_SEMIBOLD}>{review.full_name}</p>
                                 <div className={GAP_1}>
                                     {[...Array(5)].map((_, i) => (
                                         <Star
