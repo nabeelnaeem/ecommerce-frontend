@@ -1,6 +1,7 @@
 import RenderStars from './RenderStars.jsx';
 import { ShoppingCart, Truck, Shield, RotateCcw, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { toast } from "react-toastify";
 
 // Layout & Spacing
 const SPACE_Y_6 = 'space-y-6';
@@ -21,9 +22,9 @@ const FONT_MEDIUM = 'font-medium';
 const FONT_SEMIBOLD = 'font-semibold';
 
 // Component Styles
-const CATEGORY_TEXT = `${TEXT_SM_GRAY_600} mb-2`;
+const CATEGORY_TEXT = `${TEXT_SM_GRAY_600} mb-2 underline`;
 const PRODUCT_TITLE = `${TEXT_3XL_BOLD_GRAY_900} mb-2`;
-const RATING_CONTAINER = 'flex items-center gap-4 mb-4';
+const RATING_CONTAINER = 'flex items-center gap-4 mb-4 mt-4';
 const QUANTITY_CONTROL = 'flex items-center border-2 border-gray-300 rounded-lg';
 const QUANTITY_BUTTON = 'p-2 hover:bg-gray-100 transition-colors';
 const ADD_TO_CART_BASE = 'flex-1 py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2';
@@ -57,7 +58,7 @@ const ProductDetailsInfo = ({
                     </span>
                 </div>
                 <div className={FLEX_GAP_3}>
-                    <span className={TEXT_3XL_BOLD_GRAY_900}>${product.price}</span>
+                    <span className={TEXT_3XL_BOLD_GRAY_900}>RS {product.price}</span>
                 </div>
             </div>
 
@@ -84,7 +85,10 @@ const ProductDetailsInfo = ({
 
                 <div className={FLEX_GAP_4}>
                     <button
-                        onClick={() => addToCart(product, quantity)}
+                        onClick={() => {
+                            addToCart(product, quantity)
+                            toast.success(`${product.name} (x${quantity}) added to your cart `);
+                        }}
                         disabled={product.stock === 0}
                         className={`${ADD_TO_CART_BASE} ${product.stock > 0 ? ADD_TO_CART_ACTIVE : ADD_TO_CART_DISABLED
                             }`}

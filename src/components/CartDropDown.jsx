@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, X } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
@@ -25,11 +25,31 @@ const VIEW_CART_LINK_CLASS = 'text-blue-600 hover:underline text-sm font-medium'
 const CartDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { cart, removeFromCart } = useCart();
+    const dropdownRef = useRef(null);
 
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+    //close dd if click occurs outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
+
     return (
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
             <button onClick={() => setIsOpen(!isOpen)} className={CART_BUTTON_CLASS}>
                 <ShoppingCart className={CART_ICON_CLASS} />
                 <span className={CART_TEXT_CLASS}>Cart</span>

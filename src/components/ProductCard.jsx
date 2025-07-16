@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Star, ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
 import { BUTTON_PRIMARY, BUTTON_DISABLED, CARD_CLASS } from '../styles/styles';
 import RenderStars from './RenderStars.jsx';
 import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 // Product Card Classes
 const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
@@ -40,6 +41,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
     const handleAddToCart = () => {
         onAddToCart(product, quantity);
+        toast.success(`${product.name} (x${quantity}) added to your cart `);
         setQuantity(1);
     };
 
@@ -56,13 +58,11 @@ const ProductCard = ({ product, onAddToCart }) => {
 
             {/* Product Info */}
             <div className={PRODUCT_INFO_CONTAINER}>
-
                 <Link to={`/products/${product.product_id}`}>
                     <h3 className={PRODUCT_TITLE}>
                         {product.name}
                     </h3>
                 </Link>
-
                 {/* Rating */}
                 <div className="mb-2">
                     <RenderStars rating={product.rating} reviews={product.rating_count}></RenderStars>
