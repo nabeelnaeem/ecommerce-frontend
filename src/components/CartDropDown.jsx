@@ -13,9 +13,10 @@ const DROPDOWN_CONTENT_CLASS = 'p-4 max-h-96 overflow-y-auto';
 const DROPDOWN_TITLE_CLASS = 'font-semibold text-gray-900 mb-3';
 const EMPTY_CART_TEXT_CLASS = 'text-gray-500 text-center py-4';
 const CART_ITEM_LIST_CLASS = 'space-y-3';
-const CART_ITEM_CLASS = 'flex justify-between items-start border-b pb-2';
+const CART_ITEM_CLASS = 'flex items-center gap-3 border-b pb-2';
 const ITEM_NAME_CLASS = 'font-medium text-gray-800';
 const ITEM_QUANTITY_CLASS = 'text-sm text-gray-500';
+const CART_IMAGE_CLASS = 'w-12 h-12 object-cover rounded';
 const REMOVE_ITEM_BUTTON_CLASS = 'text-gray-400 hover:text-red-600';
 const REMOVE_ITEM_ICON_CLASS = 'w-4 h-4';
 const VIEW_CART_LINK_CONTAINER_CLASS = 'mt-4 text-center';
@@ -49,7 +50,12 @@ const CartDropdown = () => {
                                 <ul className={CART_ITEM_LIST_CLASS}>
                                     {cart.map(item => (
                                         <li key={item.product_id} className={CART_ITEM_CLASS}>
-                                            <div>
+                                            <img
+                                                src={item.image || `https://placehold.co/50x50?text=${encodeURIComponent(item.name)}`}
+                                                className={CART_IMAGE_CLASS}
+                                                alt={item.name}
+                                            />
+                                            <div className="flex-1">
                                                 <p className={ITEM_NAME_CLASS}>{item.name}</p>
                                                 <p className={ITEM_QUANTITY_CLASS}>Qty: {item.quantity}</p>
                                             </div>
