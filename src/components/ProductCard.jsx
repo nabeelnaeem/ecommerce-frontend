@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, ShoppingCart } from 'lucide-react';
 import { BUTTON_PRIMARY, BUTTON_DISABLED, CARD_CLASS } from '../styles/styles';
+import RenderStars from './RenderStars.jsx';
 
 // Product Card Classes
 const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
@@ -41,29 +42,6 @@ const ProductCard = ({ product, onAddToCart }) => {
         setQuantity(1);
     };
 
-    const renderStars = (rating = 0, reviews = 0) => {
-        const stars = [];
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-
-        for (let i = 0; i < 5; i++) {
-            if (i < fullStars) {
-                stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
-            } else if (i === fullStars && hasHalfStar) {
-                stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" style={{ clipPath: 'inset(0 50% 0 0)' }} />);
-            } else {
-                stars.push(<Star key={i} className="w-4 h-4 text-gray-300" />);
-            }
-        }
-
-        return (
-            <div className={RATING_CONTAINER}>
-                <div className={RATING_STARS_CONTAINER}>{stars}</div>
-                <span className={REVIEWS_TEXT}>({reviews})</span>
-            </div>
-        );
-    };
-
     return (
         <div className={PRODUCT_CARD_CLASS}>
             {/* Product Image */}
@@ -92,7 +70,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
                 {/* Rating */}
                 <div className="mb-2">
-                    {renderStars(product.rating, product.rating_count)}
+                    <RenderStars rating={product.rating} reviews={product.rating_count}></RenderStars>
                 </div>
 
                 {/* Price and Stock */}
