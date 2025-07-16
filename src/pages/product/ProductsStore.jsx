@@ -4,48 +4,48 @@ import ProductCard from '../../components/ProductCard';
 import PaginationControls from '../../components/PaginationControls';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
-import CartSummary from '../../components/CartSummary';
+import { useProductContext } from '../../context/ProductContext';
+import { fetchProductsFromApi } from '../../api/product-service.js';
+import { useCart } from '../../context/CartContext';
+
+//Classes
+const CONTAINER_CLASS = 'max-w-7xl mx-auto p-6';
+const HEADER_CLASS = 'mb-8';
+const TITLE_CLASS = 'text-3xl font-bold text-gray-900 mb-2';
+const SUBTITLE_CLASS = 'text-gray-600';
+const PRODUCTS_GRID_CLASS = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8';
+const EMPTY_STATE_CONTAINER_CLASS = 'text-center py-12';
+const EMPTY_STATE_TEXT_CLASS = 'text-gray-500 text-lg';
+const EMPTY_STATE_SUBTEXT_CLASS = 'text-gray-400 mt-2';
+const HEADER_TITLE = 'Our Products';
+const HEADER_SUBTITLE = 'Discover our amazing collection of products';
+const EMPTY_STATE_MESSAGE = 'No products found';
+const EMPTY_STATE_SUGGESTION = 'Try adjusting your search or filters';
 
 const ProductsStore = () => {
-    const [products, setProducts] = useState([]);
+    const { products, setProducts, totalProducts, setTotalProducts, totalPages, setTotalPages } = useProductContext();
+    const { addToCart } = useCart();
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [cart, setCart] = useState([]);
-
-    // Filter and pagination states
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('name');
     const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(12);
-    const [totalProducts, setTotalProducts] = useState(0);
-    const [totalPages, setTotalPages] = useState(1);
-
-    const API_BASE_URL = import.meta.env.VITE_API_URL;
 
     const fetchProducts = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            const params = new URLSearchParams({
+            const data = await fetchProductsFromApi({
                 page: currentPage,
-                limit: limit,
-                sortBy: sortBy,
-                sortOrder: sortOrder
+                limit,
+                sortBy,
+                sortOrder,
+                name: searchTerm,
             });
-
-            if (searchTerm.trim()) {
-                params.append('name', searchTerm);
-            }
-
-            const response = await fetch(`${API_BASE_URL}/products?${params}`);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
 
             if (Array.isArray(data)) {
                 setProducts(data);
@@ -85,26 +85,12 @@ const ProductsStore = () => {
         setCurrentPage(1);
     };
 
-    const addToCart = (product, quantity = 1) => {
-        setCart(prev => {
-            const existingItem = prev.find(item => item.product_id === product.product_id);
-            if (existingItem) {
-                return prev.map(item =>
-                    item.product_id === product.product_id
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                );
-            }
-            return [...prev, { ...product, quantity }];
-        });
-    };
-
     return (
-        <div className="max-w-7xl mx-auto p-6">
+        <div className={CONTAINER_CLASS}>
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Our Products</h1>
-                <p className="text-gray-600">Discover our amazing collection of products</p>
+            <div className={HEADER_CLASS}>
+                <h1 className={TITLE_CLASS}>{HEADER_TITLE}</h1>
+                <p className={SUBTITLE_CLASS}>{HEADER_SUBTITLE}</p>
             </div>
 
             {/* Search and Filters */}
@@ -129,7 +115,7 @@ const ProductsStore = () => {
             {/* Products Grid */}
             {!loading && !error && (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                    <div className={PRODUCTS_GRID_CLASS}>
                         {products.map((product) => (
                             <ProductCard
                                 key={product.product_id}
@@ -141,9 +127,9 @@ const ProductsStore = () => {
 
                     {/* Empty State */}
                     {products.length === 0 && (
-                        <div className="text-center py-12">
-                            <div className="text-gray-500 text-lg">No products found</div>
-                            <p className="text-gray-400 mt-2">Try adjusting your search or filters</p>
+                        <div className={EMPTY_STATE_CONTAINER_CLASS}>
+                            <div className={EMPTY_STATE_TEXT_CLASS}>{EMPTY_STATE_MESSAGE}</div>
+                            <p className={EMPTY_STATE_SUBTEXT_CLASS}>{EMPTY_STATE_SUGGESTION}</p>
                         </div>
                     )}
 
@@ -159,9 +145,6 @@ const ProductsStore = () => {
                     )}
                 </>
             )}
-
-            {/* Cart Summary */}
-            <CartSummary cart={cart} />
         </div>
     );
 };
