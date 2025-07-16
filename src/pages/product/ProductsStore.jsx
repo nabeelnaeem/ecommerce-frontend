@@ -6,11 +6,16 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
 import CartSummary from '../../components/CartSummary';
 
+import { useProductContext } from '../../context/ProductContext';
+import { fetchProductsFromApi } from '../../api/product-service.js';
+import { useCart } from '../../context/CartContext';
+
 const ProductsStore = () => {
-    const [products, setProducts] = useState([]);
+    const { products, setProducts, totalProducts, setTotalProducts, totalPages, setTotalPages } = useProductContext();
+    const { cart, addToCart } = useCart();
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [cart, setCart] = useState([]);
 
     // Filter and pagination states
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,34 +23,19 @@ const ProductsStore = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(12);
-    const [totalProducts, setTotalProducts] = useState(0);
-    const [totalPages, setTotalPages] = useState(1);
-
-    const API_BASE_URL = import.meta.env.VITE_API_URL;
 
     const fetchProducts = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            const params = new URLSearchParams({
+            const data = await fetchProductsFromApi({
                 page: currentPage,
-                limit: limit,
-                sortBy: sortBy,
-                sortOrder: sortOrder
+                limit,
+                sortBy,
+                sortOrder,
+                name: searchTerm,
             });
-
-            if (searchTerm.trim()) {
-                params.append('name', searchTerm);
-            }
-
-            const response = await fetch(`${API_BASE_URL}/products?${params}`);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
 
             if (Array.isArray(data)) {
                 setProducts(data);
@@ -85,19 +75,19 @@ const ProductsStore = () => {
         setCurrentPage(1);
     };
 
-    const addToCart = (product, quantity = 1) => {
-        setCart(prev => {
-            const existingItem = prev.find(item => item.product_id === product.product_id);
-            if (existingItem) {
-                return prev.map(item =>
-                    item.product_id === product.product_id
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                );
-            }
-            return [...prev, { ...product, quantity }];
-        });
-    };
+    // const addToCart = (product, quantity = 1) => {
+    //     setCart(prev => {
+    //         const existingItem = prev.find(item => item.product_id === product.product_id);
+    //         if (existingItem) {
+    //             return prev.map(item =>
+    //                 item.product_id === product.product_id
+    //                     ? { ...item, quantity: item.quantity + quantity }
+    //                     : item
+    //             );
+    //         }
+    //         return [...prev, { ...product, quantity }];
+    //     });
+    // };
 
     return (
         <div className="max-w-7xl mx-auto p-6">
