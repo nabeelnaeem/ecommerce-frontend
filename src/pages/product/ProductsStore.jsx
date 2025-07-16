@@ -4,7 +4,6 @@ import ProductCard from '../../components/ProductCard';
 import PaginationControls from '../../components/PaginationControls';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
-import CartSummary from '../../components/CartSummary';
 
 import { useProductContext } from '../../context/ProductContext';
 import { fetchProductsFromApi } from '../../api/product-service.js';
@@ -12,7 +11,7 @@ import { useCart } from '../../context/CartContext';
 
 const ProductsStore = () => {
     const { products, setProducts, totalProducts, setTotalProducts, totalPages, setTotalPages } = useProductContext();
-    const { cart, addToCart } = useCart();
+    const { addToCart } = useCart();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -75,20 +74,6 @@ const ProductsStore = () => {
         setCurrentPage(1);
     };
 
-    // const addToCart = (product, quantity = 1) => {
-    //     setCart(prev => {
-    //         const existingItem = prev.find(item => item.product_id === product.product_id);
-    //         if (existingItem) {
-    //             return prev.map(item =>
-    //                 item.product_id === product.product_id
-    //                     ? { ...item, quantity: item.quantity + quantity }
-    //                     : item
-    //             );
-    //         }
-    //         return [...prev, { ...product, quantity }];
-    //     });
-    // };
-
     return (
         <div className="max-w-7xl mx-auto p-6">
             {/* Header */}
@@ -150,8 +135,6 @@ const ProductsStore = () => {
                 </>
             )}
 
-            {/* Cart Summary */}
-            <CartSummary cart={cart} />
         </div>
     );
 };

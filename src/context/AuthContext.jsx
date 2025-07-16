@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/api.js";
+import { useCart } from "./CartContext"; // ✅ import
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { clearCart } = useCart(); // ✅ get clearCart
 
     const fetchProfile = async () => {
         try {
@@ -24,16 +26,17 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("token");
         if (token) {
             fetchProfile();
-        }
-        else {
+        } else {
             setLoading(false);
         }
     }, []);
 
     const login = (username) => setUser(username);
+
     const logout = () => {
         localStorage.removeItem("token");
         setUser(null);
+        clearCart(); // ✅ clear cart on logout
     };
 
     return (
