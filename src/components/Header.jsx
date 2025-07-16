@@ -1,45 +1,61 @@
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import Navbar from "./Navbar";
-import { STORE_NAME } from '../config/store-config.js'
-import { useAuth } from '../context/AuthContext'
+import Logo from './Logo.jsx';
+import UserProfile from './UserProfile.jsx';
+import CartDropdown from './CartDropDown.jsx';
+
 
 const Header = () => {
-    //Classes
-    const HEADER_CLASS = "bg-gray-800 text-white p-4 flex justify-between items-center";
-    const LOGO_TITLE_CLASS = " text-xl font-semibold";
-    const USERNAME_CLASS = "flex items-center gap-4";
-    const LOGOUT_BUTTON_CLASS = "bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded";
-    const LOGIN_BUTTON_CLASS = "bg-blue-600 hover:bg-blue-500 text-white px-4 py-1 rounded";
-
-
-    //State Variables
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { user, logout } = useAuth();
 
     return (
-        <header className={HEADER_CLASS}>
-            {/*Logo/Branding*/}
-            <h1 className={LOGO_TITLE_CLASS}>
-                <Link to="/">{STORE_NAME}</Link>
-            </h1>
-            {/*Navigation Links*/}
-            <Navbar />
-            {user ? (
-                <div className={USERNAME_CLASS}>
-                    <span>Hello, {user.charAt(0).toUpperCase() + user.slice(1).split(',', 1)}</span>
-                    <button
-                        onClick={logout}
-                        className={LOGOUT_BUTTON_CLASS}
-                    >
-                        Logout
-                    </button>
+        <header className="bg-white shadow-lg sticky top-0 z-40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                    {/* Logo */}
+                    <div className="flex-shrink-0">
+                        <Logo />
+                    </div>
+
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:block">
+                        <Navbar />
+                    </div>
+
+                    {/* Right side actions */}
+                    <div className="flex items-center space-x-4">
+                        {/* Shopping Cart */}
+                        <CartDropdown />
+
+                        {/* User Profile */}
+                        <UserProfile user={user} onLogout={logout} />
+
+                        {/* Mobile menu button */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="md:hidden text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                        >
+                            {isMobileMenuOpen ? (
+                                <X className="w-6 h-6" />
+                            ) : (
+                                <Menu className="w-6 h-6" />
+                            )}
+                        </button>
+                    </div>
                 </div>
-            ) : (
-                <Link to="/login" className={LOGIN_BUTTON_CLASS}>
-                    Login
-                </Link>
-            )
-            }
-        </header >
-    )
-}
-export default Header; 
+
+                {/* Mobile Navigation */}
+                {isMobileMenuOpen && (
+                    <div className="md:hidden py-4 border-t">
+                        <Navbar isMobile={true} onClose={() => setIsMobileMenuOpen(false)} />
+                    </div>
+                )}
+            </div>
+        </header>
+    );
+};
+
+export default Header;
