@@ -8,7 +8,6 @@ export const CartProvider = ({ children }) => {
         return storedCart ? JSON.parse(storedCart) : [];
     });
 
-    // 🔄 Save cart to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
@@ -17,13 +16,32 @@ export const CartProvider = ({ children }) => {
         setCart(prev => {
             const existing = prev.find(item => item.product_id === product.product_id);
             if (existing) {
+                const newQty = existing.quantity + quantity;
+                if (newQty > product.stock) return prev; // 👈 prevents overstock
                 return prev.map(item =>
                     item.product_id === product.product_id
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, quantity: newQty }
                         : item
                 );
             }
-            return [...prev, { ...product, quantity }];
+            return quantity <= product.stock
+                ? [...prev, { ...product, quantity }]
+                : prev;
+        });
+    };
+
+    const updateQuantity = (productId, change) => {
+        setCart(prev => {
+            return prev.map(item => {
+                if (item.product_id !== productId) return item;
+
+                const newQty = item.quantity + change;
+
+                if (newQty <= 0) return item; // optionally remove item if 0?
+                if (newQty > item.stock) return item; // prevent overstock
+
+                return { ...item, quantity: newQty };
+            });
         });
     };
 
@@ -37,7 +55,7 @@ export const CartProvider = ({ children }) => {
     };
 
     return (
-        <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, clearCart }}>
+        <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, clearCart, updateQuantity }}>
             {children}
         </CartContext.Provider>
     );
