@@ -25,7 +25,7 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => (
         <div className={ITEM_INNER_CLASS}>
             <div className={IMAGE_CONTAINER_CLASS}>
                 <img
-                    src={item.image}
+                    src={item.image || `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`}
                     alt={item.name}
                     className={`${IMAGE_CLASS} ${SHADOW_CLASS}`}
                 />

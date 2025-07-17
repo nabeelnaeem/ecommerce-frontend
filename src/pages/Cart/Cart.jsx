@@ -23,6 +23,7 @@ const Cart = () => {
     };
 
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
     return (
         <div className={PAGE_CONTAINER_CLASS}>
             <CartHeader />

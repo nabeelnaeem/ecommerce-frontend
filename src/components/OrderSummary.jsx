@@ -1,6 +1,5 @@
 const ROUNDED_CLASS = "rounded-2xl";
 const SHADOW_CLASS = "shadow-lg";
-const TRANSITION_CLASS = "transition-colors";
 const CONTAINER_CLASS = "space-y-6";
 const CARD_CLASS = "bg-white p-6";
 const SPACING_CLASS = "space-y-4";
