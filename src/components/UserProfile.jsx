@@ -27,13 +27,7 @@ const UserProfile = ({ user, onLogout }) => {
             </Link>
         );
     }
-
-    const displayName =
-        typeof user === 'object' && user?.username
-            ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
-            : typeof user === 'string'
-                ? user.charAt(0).toUpperCase() + user.slice(1)
-                : 'User';
+    const displayName = user.username.charAt(0).toUpperCase() + user.username.slice(1).split(',', 1);
 
     return (
         <div className="relative">
