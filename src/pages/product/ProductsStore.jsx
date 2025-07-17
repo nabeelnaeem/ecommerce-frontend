@@ -48,7 +48,6 @@ const ProductsStore = () => {
             });
 
             if (data.products) {
-                console.log('Products')
                 setProducts(data.products);
                 setTotalProducts(data.total || data.products.length);
                 setTotalPages(data.pages || Math.ceil((data.total || data.products.length) / limit));
