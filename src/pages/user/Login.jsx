@@ -1,23 +1,25 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/api";
+import { toast, ToastContainer } from "react-toastify";
+import { loginUser } from "../../api/auth-service";
 import { useAuth } from "../../context/AuthContext.jsx";
 import InputField from "../../components/InputField.jsx";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+
+// Class Constants
+const CONTAINER_DIV_CLASS = "max-w-md mx-auto p-6";
+const TITLE_CLASS = "text-xl font-semibold mb-4";
+const FORM_CLASS = "space-y-4";
+const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
+const PARAGRAPH_CLASS = "mt-4 text-center";
+const SIGNUP_LINK_CLASS = "text-blue-600 hover:underline";
+
+// Messages
+const LOGIN_SUCCESS_MSG = "Login successful";
+const LOGIN_FAILED_MSG = "Login failed";
+const DONT_HAVE_ACCOUNT_MSG = "Don't have an account?";
 
 const Login = () => {
-    const DONT_HAVE_ACCOUNT_MSG = "Don't have an account?";
-    const LOGIN_FAILED_MSG = "Login failed";
-    const LOGIN_SUCCESS_MSG = "Login successful";
-
-    const CONTAINER_DIV_CLASS = " max-w-md mx-auto p-6";
-    const TITLE_CLASS = " text-xl font-semibold mb-4";
-    const CLASS_SPACE_Y4 = " space-y-4";
-    const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500";
-    const SIGNUP_CLASS = "text-blue-600 hover:underline";
-    const PARAGRAPH_CLASS = "mt-4 text-center";
-
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -27,18 +29,16 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post("/auth/login", { username, password });
-            const { token } = res.data;
+            const { token, user } = await loginUser({ username, password });
             localStorage.setItem("token", token);
             toast.success(LOGIN_SUCCESS_MSG);
 
             setTimeout(() => {
-                login(username);
+                login(user);
                 navigate("/");
-            }, 2000);
+            }, 1000);
         } catch (err) {
-            console.error(err);
-            const errorMessage = err.response?.data?.error || LOGIN_FAILED_MSG;
+            const errorMessage = err?.response?.data?.error || LOGIN_FAILED_MSG;
             toast.error(errorMessage);
         }
     };
@@ -46,7 +46,7 @@ const Login = () => {
     return (
         <div className={CONTAINER_DIV_CLASS}>
             <h2 className={TITLE_CLASS}>Login</h2>
-            <form className={CLASS_SPACE_Y4} onSubmit={handleLogin}>
+            <form className={FORM_CLASS} onSubmit={handleLogin}>
                 <InputField
                     type="text"
                     placeholder="User Name"
@@ -66,12 +66,10 @@ const Login = () => {
                 </button>
             </form>
             <p className={PARAGRAPH_CLASS}>
-                {DONT_HAVE_ACCOUNT_MSG}
-                <Link to="/signup" className={SIGNUP_CLASS}>
-                    Sign up
-                </Link>
+                {DONT_HAVE_ACCOUNT_MSG}{" "}
+                <Link to="/signup" className={SIGNUP_LINK_CLASS}>Sign up</Link>
             </p>
-            <ToastContainer position="top-center" autoClose={2000} />
+            <ToastContainer position="top-center" autoClose={1500} />
         </div>
     );
 };

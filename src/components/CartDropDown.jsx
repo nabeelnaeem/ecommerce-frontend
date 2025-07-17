@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, X } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
+import useClickOutside from '../hooks/useClickOutside.js';
 
 //Classes
 const CART_BUTTON_CLASS = 'relative flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200';
@@ -29,24 +30,7 @@ const CartDropdown = () => {
 
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    //close dd if click occurs outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isOpen]);
+    useClickOutside(dropdownRef, () => setIsOpen(false), isOpen);
 
     return (
         <div className="relative" ref={dropdownRef}>
