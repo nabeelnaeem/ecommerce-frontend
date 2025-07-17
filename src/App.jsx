@@ -5,6 +5,9 @@ import Home from "./pages/home/Home"
 import Login from "./pages/user/Login.jsx";
 import Signup from "./pages/user/Signup.jsx";
 import ProductsStore from "./pages/product/ProductsStore.jsx";
+import ProductDetail from "./pages/product/ProductDetail.jsx";
+import { ToastContainer } from "react-toastify";
+
 
 const App = () => {
   const MAIN_CONTAINER_CLASS = "flex flex-col min-h-screen";
@@ -22,7 +25,9 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/products" element={<ProductsStore />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
           </Routes>
+          <ToastContainer position="top-center" autoClose={500} />
         </div>
         <Footer />
       </div>

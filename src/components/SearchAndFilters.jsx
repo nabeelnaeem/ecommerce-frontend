@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import { INPUT_CLASS, SELECT_CLASS } from '../styles/styles';
 
 // Search and Filters Classes
-const CONTAINER_CLASS = "mb-6 bg-white p-4 rounded-lg shadow-sm border";
+const CONTAINER_CLASS = "mb-6 bg-white p-4 rounded-lg shadow-lg border-slate-950";
 const LAYOUT_CLASS = "flex flex-col lg:flex-row gap-4 items-center";
 const SEARCH_FORM_CLASS = "flex-1";
 const SEARCH_CONTAINER_CLASS = "relative";

@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { Star, ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
 import { BUTTON_PRIMARY, BUTTON_DISABLED, CARD_CLASS } from '../styles/styles';
+import RenderStars from './RenderStars.jsx';
+import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 // Product Card Classes
 const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
@@ -38,30 +41,8 @@ const ProductCard = ({ product, onAddToCart }) => {
 
     const handleAddToCart = () => {
         onAddToCart(product, quantity);
+        toast.success(`${product.name} (x${quantity}) added to your cart `);
         setQuantity(1);
-    };
-
-    const renderStars = (rating = 0, reviews = 0) => {
-        const stars = [];
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-
-        for (let i = 0; i < 5; i++) {
-            if (i < fullStars) {
-                stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
-            } else if (i === fullStars && hasHalfStar) {
-                stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" style={{ clipPath: 'inset(0 50% 0 0)' }} />);
-            } else {
-                stars.push(<Star key={i} className="w-4 h-4 text-gray-300" />);
-            }
-        }
-
-        return (
-            <div className={RATING_CONTAINER}>
-                <div className={RATING_STARS_CONTAINER}>{stars}</div>
-                <span className={REVIEWS_TEXT}>({reviews})</span>
-            </div>
-        );
     };
 
     return (
@@ -77,22 +58,14 @@ const ProductCard = ({ product, onAddToCart }) => {
 
             {/* Product Info */}
             <div className={PRODUCT_INFO_CONTAINER}>
-                <a
-                    href={`/products/${product.product_id}`}
-                    className={PRODUCT_TITLE_LINK}
-                >
-                    <h3 className={PRODUCT_TITLE} style={{
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
-                    }}>
+                <Link to={`/products/${product.product_id}`}>
+                    <h3 className={PRODUCT_TITLE}>
                         {product.name}
                     </h3>
-                </a>
-
+                </Link>
                 {/* Rating */}
                 <div className="mb-2">
-                    {renderStars(product.rating, product.rating_count)}
+                    <RenderStars rating={product.rating} reviews={product.rating_count}></RenderStars>
                 </div>
 
                 {/* Price and Stock */}
@@ -141,7 +114,7 @@ const ProductCard = ({ product, onAddToCart }) => {
                     Add to Cart
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 
