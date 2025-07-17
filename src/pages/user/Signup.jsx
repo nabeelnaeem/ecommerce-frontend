@@ -23,7 +23,7 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
-    const usernameValidation = /^[a-zA-Z]+$/;
+    const usernameValidation = /^[a-zA-Z0-9]+$/;
 
     const handleSignup = async (e) => {
         e.preventDefault();
