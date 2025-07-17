@@ -47,11 +47,8 @@ const ProductsStore = () => {
                 name: searchTerm,
             });
 
-            if (Array.isArray(data)) {
-                setProducts(data);
-                setTotalProducts(data.length);
-                setTotalPages(Math.ceil(data.length / limit));
-            } else if (data.products) {
+            if (data.products) {
+                console.log('Products')
                 setProducts(data.products);
                 setTotalProducts(data.total || data.products.length);
                 setTotalPages(data.pages || Math.ceil((data.total || data.products.length) / limit));
