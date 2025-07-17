@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { ShoppingCart, X } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
@@ -45,17 +45,18 @@ const CartDropdown = () => {
                 <div className={DROPDOWN_CONTAINER_CLASS}>
                     <div className={DROPDOWN_CONTENT_CLASS}>
 
-
-                        <div className={VIEW_CART_LINK_CONTAINER_CLASS}>
-                            <Link
-                                to="/cart"
-                                className={VIEW_CART_LINK_CLASS}
-                                onClick={() => setIsOpen(false)}
-                            >
-                                SHOW FULL CART
-                                <ShoppingCart className={CART_ICON_CLASS} />
-                            </Link>
-                        </div>
+                        {cart.length !== 0 ? (
+                            <div className={VIEW_CART_LINK_CONTAINER_CLASS}>
+                                <Link
+                                    to="/cart"
+                                    className={VIEW_CART_LINK_CLASS}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    SHOW FULL CART
+                                    <ShoppingCart className={CART_ICON_CLASS} />
+                                </Link>
+                            </div>) : <></>
+                        }
 
                         {cart.length === 0 ? (
                             <p className={EMPTY_CART_TEXT_CLASS}>Your cart is empty</p>
@@ -82,8 +83,6 @@ const CartDropdown = () => {
                                         </li>
                                     ))}
                                 </ul>
-
-
                             </>
                         )}
                     </div>
