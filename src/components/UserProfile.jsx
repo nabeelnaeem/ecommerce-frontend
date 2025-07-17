@@ -1,8 +1,9 @@
 import { User, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
+import useClickOutside from '../hooks/useClickOutside';
 
-//Classes
+// Classes
 const LOGIN_BUTTON_CLASS = 'flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200';
 const LOGIN_ICON_CLASS = 'w-4 h-4';
 const USER_BUTTON_CLASS = 'flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-200';
@@ -18,6 +19,9 @@ const LOGOUT_BUTTON_CLASS = 'block w-full text-left px-4 py-2 text-gray-700 hove
 
 const UserProfile = ({ user, onLogout }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useClickOutside(dropdownRef, () => setIsDropdownOpen(false), isDropdownOpen);
 
     if (!user) {
         return (
@@ -27,17 +31,18 @@ const UserProfile = ({ user, onLogout }) => {
             </Link>
         );
     }
-    const displayName = user.username.charAt(0).toUpperCase() + user.username.slice(1).split(',', 1);
+
+    const displayName = user.username.charAt(0).toUpperCase() + user.username.slice(1);
 
     return (
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className={USER_BUTTON_CLASS}
             >
                 <div className={USER_AVATAR_CLASS}>
                     <span className={USER_AVATAR_TEXT_CLASS}>
-                        {displayName.charAt(0).toUpperCase()}
+                        {displayName.charAt(0)}
                     </span>
                 </div>
                 <span className={USER_NAME_CLASS}>Hello, {displayName}</span>
