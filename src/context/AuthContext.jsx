@@ -1,6 +1,5 @@
 // src/context/AuthContext.jsx
-import { createContext, useContext, useEffect, useState } from "react";
-import { fetchProfile } from "../api/auth-service";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 
 const AuthContext = createContext({
@@ -12,37 +11,22 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(() => {
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
+
+    const [loading, setLoading] = useState(false); // no need to auto-fetch user
     const { clearCart } = useCart();
 
-    const initializeAuth = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const data = await fetchProfile();
-            setUser(data.user ?? null);
-        } catch {
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        initializeAuth();
-    }, []);
-
     const login = (user) => {
+        localStorage.setItem("user", JSON.stringify(user)); // persist user
         setUser(user);
     };
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
         clearCart();
     };
