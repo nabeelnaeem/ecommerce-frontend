@@ -77,6 +77,7 @@ const ProductDetailsInfo = ({
                         <button
                             onClick={() => handleQuantityChange(1)}
                             className={QUANTITY_BUTTON}
+                            disabled={quantity >= product.stock}
                         >
                             <Plus size={16} />
                         </button>
@@ -86,11 +87,22 @@ const ProductDetailsInfo = ({
                 <div className={FLEX_GAP_4}>
                     <button
                         onClick={() => {
-                            addToCart(product, quantity)
-                            toast.success(`${product.name} (x${quantity}) added to your cart `);
+                            const existingItem = JSON.parse(localStorage.getItem('cart'))?.find(item => item.product_id === product.product_id);
+                            const alreadyInCartQty = existingItem ? existingItem.quantity : 0;
+                            const totalRequested = alreadyInCartQty + quantity;
+
+                            if (totalRequested > product.stock) {
+                                toast.error('Not enough products in stock');
+                                return;
+                            }
+
+                            addToCart(product, quantity);
+                            toast.success(`${product.name} (x${quantity}) added to your cart`);
                         }}
-                        disabled={product.stock === 0}
-                        className={`${ADD_TO_CART_BASE} ${product.stock > 0 ? ADD_TO_CART_ACTIVE : ADD_TO_CART_DISABLED
+                        disabled={product.stock === 0 || quantity > product.stock}
+                        className={`${ADD_TO_CART_BASE} ${product.stock === 0 || quantity > product.stock
+                            ? ADD_TO_CART_DISABLED
+                            : ADD_TO_CART_ACTIVE
                             }`}
                     >
                         <ShoppingCart size={20} />
@@ -106,7 +118,7 @@ const ProductDetailsInfo = ({
                         <Truck className={FEATURE_ICON} size={24} />
                         <div>
                             <p className={FONT_SEMIBOLD}>Free Shipping</p>
-                            <p className={TEXT_SM_GRAY_600}>Orders over $50</p>
+                            <p className={TEXT_SM_GRAY_600}>Orders over Rs 5000</p>
                         </div>
                     </div>
                     <div className={FEATURE_ITEM}>
