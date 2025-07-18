@@ -48,7 +48,7 @@ const SearchAndFilters = ({
                         <option value="name">Sort by Name</option>
                         <option value="price">Sort by Price</option>
                         <option value="stock">Sort by Stock</option>
-                        <option value="createdAt">Sort by Date</option>
+                        <option value="'createdAt'">Sort by Date</option>
                         <option value="rating">Sort by Rating</option>
                     </select>
 
