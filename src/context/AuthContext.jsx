@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
+import { jwtDecode } from 'jwt-decode';
 import { useCart } from "./CartContext";
 
 const AuthContext = createContext({
@@ -11,22 +12,45 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem("user");
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
-
-    const [loading, setLoading] = useState(false); // no need to auto-fetch user
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const { clearCart } = useCart();
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            logout();
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+
+            if (decoded.exp < currentTime) {
+                logout(); // token expired
+            } else {
+                setUser({
+                    user_id: decoded.user_id,
+                    username: decoded.username,
+                    email: decoded.email
+                });
+            }
+        } catch (err) {
+            logout(); // invalid token
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
     const login = (user) => {
-        localStorage.setItem("user", JSON.stringify(user)); // persist user
         setUser(user);
     };
 
     const logout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
         setUser(null);
         clearCart();
     };

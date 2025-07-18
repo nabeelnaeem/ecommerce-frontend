@@ -8,6 +8,7 @@ import ProductsStore from "./pages/product/ProductsStore.jsx";
 import ProductDetail from "./pages/product/ProductDetail.jsx";
 import { ToastContainer } from "react-toastify";
 import Cart from "./pages/Cart/Cart.jsx";
+import Profile from "./pages/user/Profile.jsx";
 
 
 const App = () => {
@@ -22,11 +23,16 @@ const App = () => {
 
         <div className={FLEX_GROW_CLASS}>
           <Routes>
+            {/* Root */}
             <Route path="/" element={<Home />} />
+            {/* User */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<Profile />} />
+            {/* Product */}
             <Route path="/products" element={<ProductsStore />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            {/* Cart */}
             <Route path="/cart" element={<Cart />} />
           </Routes>
           <ToastContainer position="top-center" autoClose={500} />
