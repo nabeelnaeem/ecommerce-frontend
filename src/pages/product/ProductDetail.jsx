@@ -61,7 +61,10 @@ const ProductDetail = () => {
     if (!product) return <p className={TEXT_CENTER}>Product not found</p>;
 
     const handleQuantityChange = (delta) => {
-        setQuantity(Math.max(1, quantity + delta));
+        setQuantity(prev => {
+            const newQuantity = prev + delta;
+            return Math.max(1, Math.min(newQuantity, product.stock));
+        });
     };
 
     return (
