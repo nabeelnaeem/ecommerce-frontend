@@ -71,7 +71,7 @@ const Login = () => {
                 {DONT_HAVE_ACCOUNT_MSG}{" "}
                 <Link to="/signup" className={SIGNUP_LINK_CLASS}>Sign up</Link>
             </p>
-
+            <ToastContainer position="top-center" autoClose={1500} />
         </div>
     );
 };
