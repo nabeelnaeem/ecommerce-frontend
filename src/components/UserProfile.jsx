@@ -2,6 +2,7 @@ import { User, ChevronDown } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import useClickOutside from '../hooks/useClickOutside';
+import { useEffect } from 'react';
 
 // Classes
 const LOGIN_BUTTON_CLASS = 'flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200';
@@ -22,6 +23,10 @@ const UserProfile = ({ user, onLogout }) => {
     const dropdownRef = useRef(null);
 
     useClickOutside(dropdownRef, () => setIsDropdownOpen(false), isDropdownOpen);
+
+    useEffect(() => {
+        setIsDropdownOpen(false); // close dropdown when user is changed (e.g., login)
+    }, [user]);
 
     if (!user) {
         return (
