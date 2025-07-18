@@ -76,7 +76,7 @@ const ProductCard = ({ product, onAddToCart }) => {
                 {/* Price and Stock */}
                 <div className={PRICE_STOCK_CONTAINER}>
                     <span className={PRICE_TEXT}>
-                        {product.price} Rs
+                        Rs {product.price}
                     </span>
                     <span className={`${STOCK_TEXT} ${product.stock > 0 ? IN_STOCK_TEXT : OUT_OF_STOCK_TEXT}`}>
                         {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
