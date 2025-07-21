@@ -1,9 +1,10 @@
-import { useCart } from '../../context/CartContext';
-import CartHeader from '../../components/CartHeader.jsx';
-import CartItems from '../../components/CartItems';
-import OrderSummary from '../../components/OrderSummary';
-import CheckoutButton from '../../components/CheckoutButton';
-import TrustIndicators from '../../components/TrustIndicators';
+import { useCart } from '../../context/CartContext.jsx';
+import CartItems from '../../components/CartItems.jsx';
+import OrderSummary from '../../components/OrderSummary.jsx';
+import SecureButton from '../../components/SecureButton.jsx';
+import TrustIndicators from '../../components/TrustIndicators.jsx';
+import { ShoppingBag } from 'lucide-react';
+import OrderPageHeader from '../../components/OrderPageHeader';
 
 const PAGE_CONTAINER_CLASS = "min-h-screen bg-gray-50";
 const CONTENT_CONTAINER_CLASS = "max-w-7xl mx-auto px-4 py-8";
@@ -26,8 +27,12 @@ const Cart = () => {
 
     return (
         <div className={PAGE_CONTAINER_CLASS}>
-            <CartHeader />
-            <div className={CONTENT_CONTAINER_CLASS}>
+            <OrderPageHeader
+                title="Shopping Cart"
+                icon={<ShoppingBag />}
+                backText="Continue Shopping"
+                backTo="/products"
+            />            <div className={CONTENT_CONTAINER_CLASS}>
                 <div className={GRID_CONTAINER_CLASS}>
                     <CartItems
                         cart={cart}
@@ -36,7 +41,7 @@ const Cart = () => {
                     />
                     <div className={SIDEBAR_CLASS}>
                         <OrderSummary subtotal={subtotal} />
-                        <CheckoutButton />
+                        <SecureButton to="/checkout" label="Secure Checkout" />
                         <TrustIndicators />
                     </div>
                 </div>

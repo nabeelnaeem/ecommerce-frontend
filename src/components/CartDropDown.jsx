@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ShoppingCart, X } from 'lucide-react';
+import { ShoppingCart, X, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
 import useClickOutside from '../hooks/useClickOutside.js';
@@ -19,8 +19,8 @@ const ITEM_QUANTITY_CLASS = 'text-sm text-gray-500';
 const CART_IMAGE_CLASS = 'w-12 h-12 object-cover rounded';
 const REMOVE_ITEM_BUTTON_CLASS = 'text-gray-400 hover:text-red-600';
 const REMOVE_ITEM_ICON_CLASS = 'w-4 h-4';
-const VIEW_CART_LINK_CONTAINER_CLASS = 'text-center mb-5';
-const VIEW_CART_LINK_CLASS = "inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-semibold text-base transition-colors duration-200";
+const VIEW_CART_LINK_CONTAINER_CLASS = 'text-center';
+const VIEW_CART_LINK_CLASS = "mb-5 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-semibold text-base transition-colors duration-200";
 
 const CartDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +54,14 @@ const CartDropdown = () => {
                                 >
                                     SHOW FULL CART
                                     <ShoppingCart className={CART_ICON_CLASS} />
+                                </Link>
+                                <Link
+                                    to="/checkout"
+                                    className={VIEW_CART_LINK_CLASS}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    CHECKOUT NOW
+                                    <ArrowRight className={CART_ICON_CLASS} />
                                 </Link>
                             </div>) : <></>
                         }

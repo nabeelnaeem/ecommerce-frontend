@@ -63,9 +63,6 @@ const UserProfile = ({ user, onLogout }) => {
                         <Link to="/orders" className={DROPDOWN_ITEM_CLASS}>
                             Orders
                         </Link>
-                        <Link to="/settings" className={DROPDOWN_ITEM_CLASS}>
-                            Settings
-                        </Link>
                         <hr className={DROPDOWN_DIVIDER_CLASS} />
                         <button
                             onClick={onLogout}
