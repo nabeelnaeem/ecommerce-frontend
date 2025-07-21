@@ -2,7 +2,7 @@ import { useCart } from '../../context/CartContext.jsx';
 import CartHeader from '../../components/CartHeader.jsx';
 import CartItems from '../../components/CartItems.jsx';
 import OrderSummary from '../../components/OrderSummary.jsx';
-import CheckoutButton from '../../components/CheckoutButton.jsx';
+import SecureButton from '../../components/SecureButton.jsx';
 import TrustIndicators from '../../components/TrustIndicators.jsx';
 
 const PAGE_CONTAINER_CLASS = "min-h-screen bg-gray-50";
@@ -36,7 +36,7 @@ const Cart = () => {
                     />
                     <div className={SIDEBAR_CLASS}>
                         <OrderSummary subtotal={subtotal} />
-                        <CheckoutButton />
+                        <SecureButton to="/checkout" label="Secure Checkout" />
                         <TrustIndicators />
                     </div>
                 </div>

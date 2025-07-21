@@ -9,8 +9,8 @@ import CheckoutHeader from '../../components/CheckoutHeader';
 import CustomerInformation from '../../components/CustomerInformation';
 import PaymentMethods from '../../components/PaymentMethods';
 import CheckoutOrderSummary from '../../components/CheckoutOrderSummary';
-import CompleteOrderButton from '../../components/CompleteOrderButton.jsx';
 import ShippingMethod from '../../components/ShippingMethod';
+import SecureButton from '../../components/SecureButton';
 
 // Constants
 const SHIPPING_RATES = {
@@ -125,9 +125,10 @@ const Checkout = () => {
                     </div>
                     <div className={SIDEBAR_CLASSES}>
                         <CheckoutOrderSummary subtotal={subtotal} shipping={shipping} total={total} />
-                        <CompleteOrderButton
-                            onSubmit={handleSubmit}
-                            isValid={isFormValid && !loading}
+                        <SecureButton
+                            label="Complete Order"
+                            onClick={handleSubmit}
+                            disabled={!isFormValid || loading}
                         />
                         <TrustIndicators />
                     </div>
