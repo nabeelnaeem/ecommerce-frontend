@@ -1,9 +1,9 @@
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../context/CartContext.jsx';
 import CartHeader from '../../components/CartHeader.jsx';
-import CartItems from '../../components/CartItems';
-import OrderSummary from '../../components/OrderSummary';
-import CheckoutButton from '../../components/CheckoutButton';
-import TrustIndicators from '../../components/TrustIndicators';
+import CartItems from '../../components/CartItems.jsx';
+import OrderSummary from '../../components/OrderSummary.jsx';
+import CheckoutButton from '../../components/CheckoutButton.jsx';
+import TrustIndicators from '../../components/TrustIndicators.jsx';
 
 const PAGE_CONTAINER_CLASS = "min-h-screen bg-gray-50";
 const CONTENT_CONTAINER_CLASS = "max-w-7xl mx-auto px-4 py-8";
