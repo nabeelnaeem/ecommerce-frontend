@@ -7,11 +7,11 @@ import { fetchProfile } from '../../api/auth-service.js';
 import TrustIndicators from '../../components/TrustIndicators';
 import CustomerInformation from '../../components/CustomerInformation';
 import PaymentMethods from '../../components/PaymentMethods';
-import CheckoutOrderSummary from '../../components/CheckoutOrderSummary';
 import ShippingMethod from '../../components/ShippingMethod';
 import SecureButton from '../../components/SecureButton';
 import { CreditCard } from 'lucide-react';
 import OrderPageHeader from '../../components/OrderPageHeader';
+import OrderSummary from '../../components/OrderSummary.jsx';
 
 // Constants
 const SHIPPING_RATES = {
@@ -130,7 +130,11 @@ const Checkout = () => {
                         />
                     </div>
                     <div className={SIDEBAR_CLASSES}>
-                        <CheckoutOrderSummary subtotal={subtotal} shipping={shipping} total={total} />
+                        <OrderSummary
+                            subtotal={subtotal}
+                            shipping={shipping}
+                            total={total}
+                        />
                         <SecureButton
                             label="Complete Order"
                             onClick={handleSubmit}
