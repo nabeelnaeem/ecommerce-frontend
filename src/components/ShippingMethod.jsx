@@ -9,9 +9,9 @@ const SHIPPING_RATES = {
 
 // Constants for shipping methods
 const SHIPPING_METHODS = [
-    { id: 'standard', name: 'Standard (3–5 Days)', icon: '📦' },
-    { id: 'express', name: 'Express (1–2 Days)', icon: '🚀' },
-    { id: 'pickup', name: 'Store Pickup', icon: '🏬' }
+    { id: 'standard', name: 'Standard (3–5 Days)', icon: '📦', rate: SHIPPING_RATES.standard },
+    { id: 'express', name: 'Express (1–2 Days)', icon: '🚀', rate: SHIPPING_RATES.express },
+    { id: 'pickup', name: 'Store Pickup', icon: '🏬', rate: SHIPPING_RATES.pickup }
 ];
 
 // Constants for classnames
@@ -53,7 +53,7 @@ const ShippingMethod = ({ selectedShipping, setSelectedShipping, setShippingPric
                     >
                         <div className={METHOD_CONTENT_CLASSES}>
                             <div className={METHOD_ICON_CLASSES}>{method.icon}</div>
-                            <div className={METHOD_NAME_CLASSES}>{method.name}</div>
+                            <div className={METHOD_NAME_CLASSES}>{method.name} +Rs. {method.rate}</div>
                         </div>
                     </button>
                 ))}
