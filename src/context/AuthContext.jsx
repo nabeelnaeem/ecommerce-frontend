@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            logout();
+            setUser(null);
             setLoading(false);
             return;
         }
@@ -30,7 +30,8 @@ export const AuthProvider = ({ children }) => {
             const currentTime = Date.now() / 1000;
 
             if (decoded.exp < currentTime) {
-                logout(); // token expired
+                localStorage.removeItem("token");
+                setUser(null);
             } else {
                 setUser({
                     user_id: decoded.user_id,
@@ -39,7 +40,8 @@ export const AuthProvider = ({ children }) => {
                 });
             }
         } catch (err) {
-            logout(); // invalid token
+            localStorage.removeItem("token");
+            setUser(null);
         } finally {
             setLoading(false);
         }
