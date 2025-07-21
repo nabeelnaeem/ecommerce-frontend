@@ -9,14 +9,14 @@ const PaymentMethods = ({ selectedMethod, setSelectedMethod }) => {
     ];
 
     return (
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden text-center">
             <div className="p-6 border-b bg-gradient-to-r from-indigo-50 to-purple-50">
                 <h2 className="text-xl font-semibold text-gray-900">
                     <CreditCard className="w-5 h-5 inline mr-2" />
                     Payment Method
                 </h2>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4">
+            <div className="p-6 grid grid-cols-4 gap-4">
                 {methods.map((method) => (
                     <button
                         key={method.id}
