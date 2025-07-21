@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import Cart from "./pages/cart/Cart.jsx";
 import Profile from "./pages/user/Profile.jsx";
 import Checkout from "./pages/checkout/Checkout.jsx";
+import Thankyou from "./pages/checkout/Thankyou.jsx";
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/cart" element={<Cart />} />
             {/* Checkout */}
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/thank-you" element={<Thankyou />} />
           </Routes>
           <ToastContainer position="top-center" autoClose={500} />
         </div>

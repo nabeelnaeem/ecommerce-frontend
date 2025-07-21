@@ -59,7 +59,6 @@ const Checkout = () => {
     const tax = subtotal * 0.08;
     const total = subtotal + shipping;
     const isFormValid = formData.fullName && formData.phone && formData.address && cart.length > 0;
-
     const handleSubmit = async () => {
         if (!isFormValid) {
             toast.warn('⚠️ Please complete all required fields');
@@ -68,16 +67,30 @@ const Checkout = () => {
 
         setLoading(true);
         try {
-            await placeOrder(cart, formData, selectedMethod, selectedShipping, shipping);
+            const result = await placeOrder(cart, formData, selectedMethod, selectedShipping, shipping);
+
             toast.success('✅ Order placed!');
             clearCart();
-            navigate('/thank-you');
+
+            navigate('/thank-you', {
+                state: {
+                    order_id: result.order_id,
+                    tracking_id: result.tracking_id,
+                    shipping_method: selectedShipping,
+                    payment_method: selectedMethod,
+                    subtotal,
+                    shipping,
+                    total
+                }
+            });
+
         } catch (err) {
             toast.error('❌ Failed to place order');
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="min-h-screen bg-gray-50">

@@ -4,7 +4,7 @@ const PaymentMethods = ({ selectedMethod, setSelectedMethod }) => {
     const methods = [
         { id: 'easypaisa', name: 'Easypaisa', icon: '📱' },
         { id: 'jazzcash', name: 'JazzCash', icon: '💳' },
-        { id: 'cod', name: 'Cash on Delivery', icon: '💵' },
+        { id: 'cash_on_delivery', name: 'Cash on Delivery', icon: '💵' },
         { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦' }
     ];
 

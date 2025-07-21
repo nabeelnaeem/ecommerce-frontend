@@ -32,8 +32,8 @@ const ShippingMethod = ({ selectedShipping, setSelectedShipping, setShippingPric
                         key={method.id}
                         onClick={() => handleSelect(method.id)}
                         className={`p-4 border-2 rounded-xl transition-all ${selectedShipping === method.id
-                                ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                            : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
                         <div className="text-center">
