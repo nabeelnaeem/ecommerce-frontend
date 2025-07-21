@@ -5,12 +5,13 @@ import { toast } from 'react-toastify';
 import { placeOrder } from '../../api/checkout-service.js';
 import { fetchProfile } from '../../api/auth-service.js';
 import TrustIndicators from '../../components/TrustIndicators';
-import CheckoutHeader from '../../components/CheckoutHeader';
 import CustomerInformation from '../../components/CustomerInformation';
 import PaymentMethods from '../../components/PaymentMethods';
 import CheckoutOrderSummary from '../../components/CheckoutOrderSummary';
 import ShippingMethod from '../../components/ShippingMethod';
 import SecureButton from '../../components/SecureButton';
+import { CreditCard } from 'lucide-react';
+import OrderPageHeader from '../../components/OrderPageHeader';
 
 // Constants
 const SHIPPING_RATES = {
@@ -107,7 +108,12 @@ const Checkout = () => {
 
     return (
         <div className={PAGE_CLASSES}>
-            <CheckoutHeader />
+            <OrderPageHeader
+                title="Checkout"
+                icon={<CreditCard />}
+                backText="Back to Cart"
+                onBackClick={() => window.history.back()}
+            />
             <div className={CONTAINER_CLASSES}>
                 <div className={GRID_CLASSES}>
                     <div className={MAIN_CONTENT_CLASSES}>
