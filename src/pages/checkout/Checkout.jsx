@@ -12,11 +12,27 @@ import CheckoutOrderSummary from '../../components/CheckoutOrderSummary';
 import CompleteOrderButton from '../../components/CompleteOrderButton.jsx';
 import ShippingMethod from '../../components/ShippingMethod';
 
+// Constants
 const SHIPPING_RATES = {
     standard: 150,
     express: 300,
     pickup: 0
 };
+
+// Classname constants
+const PAGE_CLASSES = "min-h-screen bg-gray-50";
+const CONTAINER_CLASSES = "max-w-7xl mx-auto px-4 py-8";
+const GRID_CLASSES = "grid grid-cols-1 lg:grid-cols-3 gap-8";
+const MAIN_CONTENT_CLASSES = "lg:col-span-2 space-y-6";
+const SIDEBAR_CLASSES = "space-y-6";
+const LOADING_TEXT_CLASSES = "text-gray-500";
+
+// Messages
+const TOAST_PROFILE_ERROR_MESSAGE = '⚠️ Failed to load profile';
+const TOAST_ORDER_ERROR_MESSAGE = '❌ Failed to place order';
+const TOAST_WARNING_MESSAGE = '⚠️ Please complete all required fields';
+const TOAST_SUCCESS_MESSAGE = '✅ Order placed!';
+
 
 const Checkout = () => {
     const { cart, clearCart } = useCart();
@@ -30,8 +46,7 @@ const Checkout = () => {
     const [selectedMethod, setSelectedMethod] = useState('easypaisa');
     const [loading, setLoading] = useState(false);
     const [selectedShipping, setSelectedShipping] = useState('standard');
-    const [shipping, setShipping] = useState(150); // initial value from default
-
+    const [shipping, setShipping] = useState(SHIPPING_RATES.standard);
     const [profileLoaded, setProfileLoaded] = useState(false);
 
     useEffect(() => {
@@ -44,7 +59,7 @@ const Checkout = () => {
                     address: data.user.address || ''
                 });
             } catch (err) {
-                toast.error('⚠️ Failed to load profile');
+                toast.error(TOAST_PROFILE_ERROR_MESSAGE);
             } finally {
                 setProfileLoaded(true);
             }
@@ -53,15 +68,13 @@ const Checkout = () => {
         loadUserData();
     }, []);
 
-
-
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = subtotal * 0.08;
     const total = subtotal + shipping;
     const isFormValid = formData.fullName && formData.phone && formData.address && cart.length > 0;
+
     const handleSubmit = async () => {
         if (!isFormValid) {
-            toast.warn('⚠️ Please complete all required fields');
+            toast.warn(TOAST_WARNING_MESSAGE);
             return;
         }
 
@@ -69,7 +82,7 @@ const Checkout = () => {
         try {
             const result = await placeOrder(cart, formData, selectedMethod, selectedShipping, shipping);
 
-            toast.success('✅ Order placed!');
+            toast.success(TOAST_SUCCESS_MESSAGE);
             clearCart();
 
             navigate('/thank-you', {
@@ -85,29 +98,32 @@ const Checkout = () => {
             });
 
         } catch (err) {
-            toast.error('❌ Failed to place order');
+            toast.error(TOAST_ORDER_ERROR_MESSAGE);
+
         } finally {
             setLoading(false);
         }
     };
 
-
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className={PAGE_CLASSES}>
             <CheckoutHeader />
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 space-y-6">
+            <div className={CONTAINER_CLASSES}>
+                <div className={GRID_CLASSES}>
+                    <div className={MAIN_CONTENT_CLASSES}>
                         {profileLoaded ? (
                             <CustomerInformation formData={formData} setFormData={setFormData} />
                         ) : (
-                            <div className="text-gray-500">Loading profile...</div>
+                            <div className={LOADING_TEXT_CLASSES}>Loading profile...</div>
                         )}
                         <PaymentMethods selectedMethod={selectedMethod} setSelectedMethod={setSelectedMethod} />
-                        <ShippingMethod selectedShipping={selectedShipping} setSelectedShipping={setSelectedShipping} setShippingPrice={setShipping}
+                        <ShippingMethod
+                            selectedShipping={selectedShipping}
+                            setSelectedShipping={setSelectedShipping}
+                            setShippingPrice={setShipping}
                         />
                     </div>
-                    <div className="space-y-6">
+                    <div className={SIDEBAR_CLASSES}>
                         <CheckoutOrderSummary subtotal={subtotal} shipping={shipping} total={total} />
                         <CompleteOrderButton
                             onSubmit={handleSubmit}
