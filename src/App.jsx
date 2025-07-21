@@ -7,8 +7,9 @@ import Signup from "./pages/user/Signup.jsx";
 import ProductsStore from "./pages/product/ProductsStore.jsx";
 import ProductDetail from "./pages/product/ProductDetail.jsx";
 import { ToastContainer } from "react-toastify";
-import Cart from "./pages/Cart/Cart.jsx";
+import Cart from "./pages/cart/Cart.jsx";
 import Profile from "./pages/user/Profile.jsx";
+import Checkout from "./pages/checkout/Checkout.jsx";
 
 
 const App = () => {
@@ -34,6 +35,8 @@ const App = () => {
             <Route path="/products/:id" element={<ProductDetail />} />
             {/* Cart */}
             <Route path="/cart" element={<Cart />} />
+            {/* Checkout */}
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
           <ToastContainer position="top-center" autoClose={500} />
         </div>
