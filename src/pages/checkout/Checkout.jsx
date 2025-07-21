@@ -57,7 +57,7 @@ const Checkout = () => {
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const tax = subtotal * 0.08;
-    const total = subtotal + shipping + tax;
+    const total = subtotal + shipping;
     const isFormValid = formData.fullName && formData.phone && formData.address && cart.length > 0;
 
     const handleSubmit = async () => {
@@ -68,7 +68,7 @@ const Checkout = () => {
 
         setLoading(true);
         try {
-            await placeOrder(cart, formData, selectedMethod, selectedShipping);
+            await placeOrder(cart, formData, selectedMethod, selectedShipping, shipping);
             toast.success('✅ Order placed!');
             clearCart();
             navigate('/thank-you');
@@ -95,7 +95,7 @@ const Checkout = () => {
                         />
                     </div>
                     <div className="space-y-6">
-                        <CheckoutOrderSummary subtotal={subtotal} shipping={shipping} tax={tax} total={total} />
+                        <CheckoutOrderSummary subtotal={subtotal} shipping={shipping} total={total} />
                         <CompleteOrderButton
                             onSubmit={handleSubmit}
                             isValid={isFormValid && !loading}

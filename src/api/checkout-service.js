@@ -1,6 +1,6 @@
 import api from './api';
 
-export const placeOrder = async (cart, formData, paymentMethod) => {
+export const placeOrder = async (cart, formData, paymentMethod, shippingMethod, shippingFee) => {
     const payload = {
         cart: cart.map(item => ({
             product_id: item.product_id,
@@ -10,7 +10,8 @@ export const placeOrder = async (cart, formData, paymentMethod) => {
             full_name: formData.fullName,
             address: formData.address,
             phone: formData.phone,
-            method: 'standard'
+            method: shippingMethod,
+            shipping_fee: shippingFee
         },
         paymentInfo: {
             method: paymentMethod,

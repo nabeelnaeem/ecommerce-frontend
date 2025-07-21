@@ -13,10 +13,6 @@ const CheckoutOrderSummary = ({ subtotal, shipping, tax, total }) => {
                 <span className="font-medium">Rs {shipping.toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between">
-                <span className="text-gray-600">Tax (8%)</span>
-                <span className="font-medium">Rs {tax.toFixed(2)}</span>
-            </div>
 
             <div className="border-t pt-4 flex justify-between text-lg font-bold">
                 <span>Total</span>
