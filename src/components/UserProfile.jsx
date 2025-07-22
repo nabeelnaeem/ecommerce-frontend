@@ -36,6 +36,9 @@ const UserProfile = ({ user, onLogout }) => {
             </Link>
         );
     }
+    const handleClickOnLink = () => {
+        setIsDropdownOpen(false);
+    }
 
     const displayName = user.username.charAt(0).toUpperCase() + user.username.slice(1);
 
@@ -57,10 +60,10 @@ const UserProfile = ({ user, onLogout }) => {
             {isDropdownOpen && (
                 <div className={DROPDOWN_MENU_CLASS}>
                     <div className={DROPDOWN_CONTAINER_CLASS}>
-                        <Link to="/profile" className={DROPDOWN_ITEM_CLASS}>
+                        <Link to="/profile" className={DROPDOWN_ITEM_CLASS} onClick={handleClickOnLink}>
                             My Profile
                         </Link>
-                        <Link to="/orders" className={DROPDOWN_ITEM_CLASS}>
+                        <Link to="/orders" className={DROPDOWN_ITEM_CLASS} onClick={handleClickOnLink}>
                             Orders
                         </Link>
                         <hr className={DROPDOWN_DIVIDER_CLASS} />
