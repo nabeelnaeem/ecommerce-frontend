@@ -52,13 +52,16 @@ const ProductCard = ({ product, onAddToCart }) => {
     return (
         <div className={PRODUCT_CARD_CLASS}>
             {/* Product Image */}
-            <div className={PRODUCT_IMAGE_CONTAINER}>
-                <img
-                    src={product.image || `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
-                    alt={product.name}
-                    className={PRODUCT_IMAGE}
-                />
-            </div>
+            <Link to={`/products/${product.product_id}`}>
+                <div className={PRODUCT_IMAGE_CONTAINER}>
+                    <img
+                        src={product.image || `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
+                        alt={product.name}
+                        className={PRODUCT_IMAGE}
+                    />
+                </div>
+            </Link>
+
 
             {/* Product Info */}
             <div className={PRODUCT_INFO_CONTAINER}>

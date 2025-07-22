@@ -11,6 +11,8 @@ import Cart from "./pages/cart/Cart.jsx";
 import Profile from "./pages/user/Profile.jsx";
 import Checkout from "./pages/checkout/Checkout.jsx";
 import Thankyou from "./pages/checkout/Thankyou.jsx";
+import Orders from './pages/orders/Orders';
+import OrderDetail from './pages/orders/OrderDetail';
 
 
 const App = () => {
@@ -31,6 +33,9 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />
+            {/* Orders */}
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:order_id" element={<OrderDetail />} />
             {/* Product */}
             <Route path="/products" element={<ProductsStore />} />
             <Route path="/products/:id" element={<ProductDetail />} />
