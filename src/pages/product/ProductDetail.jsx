@@ -5,7 +5,8 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
 import ReviewsDisplay from '../../components/ReviewsDisplay';
 import ProductDetailsInfo from '../../components/ProductDetailsInfo.jsx';
-
+import { checkIfPurchase } from '../../api/review-service.js'
+import { useAuth } from '../../context/AuthContext.jsx';
 
 // Layout & Spacing
 const MAX_WIDTH_CONTAINER = 'max-w-7xl mx-auto px-4 py-8';
@@ -40,6 +41,8 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [canReview, setCanReview] = useState(false);
+    const { user, isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,7 +56,21 @@ const ProductDetail = () => {
             }
         };
 
-        fetchData();
+        const verifyPurchase = async () => {
+            try {
+                const res = await checkIfPurchase(id);
+                setCanReview(res?.hasPurchased);
+            } catch (error) {
+                console.log('Error checking purchase status:', error.message);
+            }
+        };
+
+        if (id) {
+            fetchData();
+            if (isAuthenticated) {
+                verifyPurchase();
+            }
+        }
     }, [id]);
 
     if (loading) return <LoadingIndicator />;
@@ -112,7 +129,14 @@ const ProductDetail = () => {
                     )}
 
                     {activeTab === 'reviews' && (
-                        <ReviewsDisplay rating={product.rating} reviews={product.reviews} />
+                        <>
+                            <ReviewsDisplay rating={product.rating} reviews={product.reviews} />
+                            {canReview ? (
+                                <p>You can leave a review!!!</p>
+                            ) : (
+                                <p>Only verified buyer can leave a review!</p>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
