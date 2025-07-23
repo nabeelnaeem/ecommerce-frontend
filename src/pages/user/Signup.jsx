@@ -73,7 +73,7 @@ const Signup = () => {
                 Already have an account?{" "}
                 <Link to="/login" className={LOGIN_LINK_CLASS}>Log in</Link>
             </p>
-            <ToastContainer position="top-center" autoClose={1500} />
+            {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         </div>
     );
 };

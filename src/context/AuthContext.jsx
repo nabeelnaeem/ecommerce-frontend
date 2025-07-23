@@ -1,7 +1,8 @@
-// src/context/AuthContext.jsx
-import { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from 'jwt-decode';
+import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 import { useCart } from "./CartContext";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({
     user: null,
@@ -11,14 +12,62 @@ const AuthContext = createContext({
     logout: () => { },
 });
 
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const { clearCart } = useCart();
+    const logoutTimer = useRef(null);
+    const navigate = useNavigate();
+
+    const clearAuth = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        clearCart();
+        navigate(0);
+        console.log(path);
+    };
+
+    const logoutAndNotify = () => {
+        toast.error("🔒 Session expired. Please log in again.");
+        setTimeout(() => {
+            clearAuth();
+        }, 1500);
+    };
+
+    const login = (user) => {
+        setUser(user);
+        setupTokenAutoLogout();
+    };
+
+    const logout = () => {
+        clearAuth();
+    };
+
+    const setupTokenAutoLogout = () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+            const timeLeft = decoded.exp - currentTime;
+
+            if (timeLeft <= 0) {
+                logoutAndNotify();
+            } else {
+                if (logoutTimer.current) clearTimeout(logoutTimer.current);
+                logoutTimer.current = setTimeout(() => {
+                    logoutAndNotify();
+                }, timeLeft * 1000);
+            }
+        } catch (err) {
+            logoutAndNotify();
+        }
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
         if (!token) {
             setUser(null);
             setLoading(false);
@@ -30,32 +79,21 @@ export const AuthProvider = ({ children }) => {
             const currentTime = Date.now() / 1000;
 
             if (decoded.exp < currentTime) {
-                localStorage.removeItem("token");
-                setUser(null);
+                logoutAndNotify();
             } else {
                 setUser({
                     user_id: decoded.user_id,
                     username: decoded.username,
-                    email: decoded.email
+                    email: decoded.email,
                 });
+                setupTokenAutoLogout();
             }
         } catch (err) {
-            localStorage.removeItem("token");
-            setUser(null);
+            logoutAndNotify();
         } finally {
             setLoading(false);
         }
     }, []);
-
-    const login = (user) => {
-        setUser(user);
-    };
-
-    const logout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
-        clearCart();
-    };
 
     const isAuthenticated = !!user;
 
