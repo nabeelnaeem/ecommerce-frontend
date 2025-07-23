@@ -11,7 +11,6 @@ const CONTAINER_CLASS = "max-w-5xl mx-auto px-4 py-10 space-y-10";
 const SECTION_CLASS = "bg-white p-6 rounded-2xl shadow-md space-y-4 border border-gray-200";
 const SECTION_TITLE_CLASS = "text-2xl font-semibold text-indigo-700 flex items-center gap-2";
 const ROW_CLASS = "flex justify-between flex-wrap text-sm md:text-base border-b border-gray-100 py-2";
-const ORDER_ITEM_CLASS = "flex justify-between flex-wrap text-sm md:text-base border-b border-gray-100 py-2";
 const LABEL_CLASS = "text-gray-500 font-medium w-1/2 md:w-auto";
 const VALUE_CLASS = "font-semibold text-gray-800 text-right w-1/2 md:w-auto";
 const LOADING_PARAGRAPH_CLASS = "text-center text-gray-600 mt-10";
