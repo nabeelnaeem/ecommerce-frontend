@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { Receipt } from 'lucide-react';
 import OrderPageHeader from '../../components/OrderPageHeader';
 
-// ✅ Classname Constants
+// Classname Constants
 const PAGE_CLASS = "min-h-screen bg-gray-50";
 const CONTAINER_CLASS = "max-w-5xl mx-auto px-4 py-10 space-y-10";
 const SECTION_CLASS = "bg-white p-6 rounded-2xl shadow-md space-y-4 border border-gray-200";
@@ -16,8 +16,14 @@ const VALUE_CLASS = "font-semibold text-gray-800 text-right w-1/2 md:w-auto";
 const LOADING_PARAGRAPH_CLASS = "text-center text-gray-600 mt-10";
 const STATUS_BADGE_CLASS = "px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700";
 const SHIPPING_BADGE_CLASS = "px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700";
-
-// ✅ Toast Message Constants
+const ITEM_CONTAINER = 'flex items-center justify-between gap-4 border-b border-gray-100 py-2';
+const ITEM_IMAGE_CONTAINER = 'flex items-center gap-4';
+const ITEM_IMAGE = 'w-16 h-16 object-cover rounded-md border';
+const ITEM_DETAILS_CONTAINER = '';
+const ITEM_NAME = 'font-medium text-gray-800';
+const ITEM_QUANTITY = 'text-sm text-gray-500';
+const ITEM_PRICE = 'font-semibold text-gray-800 text-right';
+// Toast Message Constants
 const FAILED_ORDER_LOAD_MESSAGE = "⚠️ Failed to load order details";
 
 const OrderDetail = () => {
@@ -92,20 +98,19 @@ const OrderDetail = () => {
                 <div className={SECTION_CLASS}>
                     <h2 className={SECTION_TITLE_CLASS}>🛒 Items</h2>
                     {items.map(item => (
-                        <div key={item.product_id} className="flex items-center justify-between gap-4 border-b border-gray-100 py-2">
-                            <div className="flex items-center gap-4">
+                        <div key={item.product_id} className={ITEM_CONTAINER}>
+                            <div className={ITEM_IMAGE_CONTAINER}>
                                 <img
                                     src={item.image || `https://placehold.co/100x100?text=${encodeURIComponent(item.product_name)}`}
-                                    //Will replace item.image to item.image_url to get the image from db 
                                     alt={item.product_name}
-                                    className="w-16 h-16 object-cover rounded-md border"
+                                    className={ITEM_IMAGE}
                                 />
-                                <div>
-                                    <p className="font-medium text-gray-800">{item.product_name}</p>
-                                    <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                                <div className={ITEM_DETAILS_CONTAINER}>
+                                    <p className={ITEM_NAME}>{item.product_name}</p>
+                                    <p className={ITEM_QUANTITY}>Qty: {item.quantity}</p>
                                 </div>
                             </div>
-                            <span className="font-semibold text-gray-800 text-right">Rs {item.amount.toFixed(2)}</span>
+                            <span className={ITEM_PRICE}>Rs {item.amount.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>
