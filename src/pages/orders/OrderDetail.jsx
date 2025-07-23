@@ -38,11 +38,11 @@ const OrderDetail = () => {
                 setData(response.data);
             } catch (err) {
                 toast.error(FAILED_ORDER_LOAD_MESSAGE);
-            } finally {
-                setLoading(false);
                 setTimeout(() => {
                     navigate('/');
                 }, 1000);
+            } finally {
+                setLoading(false);
             }
         };
 
