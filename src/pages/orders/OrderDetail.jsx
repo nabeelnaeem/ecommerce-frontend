@@ -40,11 +40,21 @@ const OrderDetail = () => {
         fetchOrder();
     }, [order_id]);
 
+
+
     if (loading) return <div className={PAGE_CLASS}><p className={LOADING_PARAGRAPH_CLASS}>Loading order...</p></div>;
     if (!data) return null;
 
     const { user, order, items, shipping, payment } = data;
+    let shippingFee = 0;
 
+    if (shipping.method === 'standard') {
+        shippingFee = 150;
+    } else if (shipping.method === 'express') {
+        shippingFee = 300;
+    } else if (shipping.method === 'pickup') {
+        shippingFee = 0;
+    }
     return (
         <div className={PAGE_CLASS}>
             <OrderPageHeader
@@ -108,6 +118,8 @@ const OrderDetail = () => {
                             <span className={SHIPPING_BADGE_CLASS}>{shipping.method}</span>
                         </span>
                     </div>
+
+                    <div className={ROW_CLASS}><span className={LABEL_CLASS}>Shipping Fee</span><span className={VALUE_CLASS}>{shippingFee.toFixed(2)}</span></div>
                     <div className={ROW_CLASS}><span className={LABEL_CLASS}>Tracking ID</span><span className={VALUE_CLASS}>{shipping.tracking_id}</span></div>
                     <div className={ROW_CLASS}><span className={LABEL_CLASS}>Shipping Status</span><span className={VALUE_CLASS}>{shipping.shipping_status}</span></div>
                     <div className={ROW_CLASS}><span className={LABEL_CLASS}>Shipping Address</span><span className={VALUE_CLASS}>{shipping.address}</span></div>
