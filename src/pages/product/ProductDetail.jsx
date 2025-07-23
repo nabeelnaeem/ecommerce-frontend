@@ -8,6 +8,7 @@ import ProductDetailsInfo from '../../components/ProductDetailsInfo.jsx';
 import { checkIfPurchase, submitProductReview, updateProductReview } from '../../api/review-service.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
+import OrderPageHeader from '../../components/OrderPageHeader.jsx';
 
 // Layout & Spacing
 const MAX_WIDTH_CONTAINER = 'max-w-7xl mx-auto px-4 py-8';
@@ -160,6 +161,11 @@ const ProductDetail = () => {
 
     return (
         <div className={MAX_WIDTH_CONTAINER}>
+            <OrderPageHeader
+                title="Product Detail"
+                backText="Back to products page"
+                backTo="/products"
+            />
             <div className={GRID_LAYOUT}>
                 <div className={SPACE_Y_4}>
                     <img
