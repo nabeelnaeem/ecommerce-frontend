@@ -11,12 +11,12 @@ const CONTAINER_CLASS = "max-w-5xl mx-auto px-4 py-10 space-y-10";
 const SECTION_CLASS = "bg-white p-6 rounded-2xl shadow-md space-y-4 border border-gray-200";
 const SECTION_TITLE_CLASS = "text-2xl font-semibold text-indigo-700 flex items-center gap-2";
 const ROW_CLASS = "flex justify-between flex-wrap text-sm md:text-base border-b border-gray-100 py-2";
+const ORDER_ITEM_CLASS = "flex justify-between flex-wrap text-sm md:text-base border-b border-gray-100 py-2";
 const LABEL_CLASS = "text-gray-500 font-medium w-1/2 md:w-auto";
 const VALUE_CLASS = "font-semibold text-gray-800 text-right w-1/2 md:w-auto";
 const LOADING_PARAGRAPH_CLASS = "text-center text-gray-600 mt-10";
 const STATUS_BADGE_CLASS = "px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700";
 const SHIPPING_BADGE_CLASS = "px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700";
-const SECTION_DIVIDER_CLASS = "border-t border-gray-100 pt-4";
 
 // ✅ Toast Message Constants
 const FAILED_ORDER_LOAD_MESSAGE = "⚠️ Failed to load order details";
@@ -83,9 +83,20 @@ const OrderDetail = () => {
                 <div className={SECTION_CLASS}>
                     <h2 className={SECTION_TITLE_CLASS}>🛒 Items</h2>
                     {items.map(item => (
-                        <div key={item.product_id} className={ROW_CLASS}>
-                            <span className={LABEL_CLASS}>{item.product_name} × {item.quantity}</span>
-                            <span className={VALUE_CLASS}>Rs {item.amount.toFixed(2)}</span>
+                        <div key={item.product_id} className="flex items-center justify-between gap-4 border-b border-gray-100 py-2">
+                            <div className="flex items-center gap-4">
+                                <img
+                                    src={item.image || `https://placehold.co/100x100?text=${encodeURIComponent(item.product_name)}`}
+                                    //Will replace item.image to item.image_url to get the image from db 
+                                    alt={item.product_name}
+                                    className="w-16 h-16 object-cover rounded-md border"
+                                />
+                                <div>
+                                    <p className="font-medium text-gray-800">{item.product_name}</p>
+                                    <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                                </div>
+                            </div>
+                            <span className="font-semibold text-gray-800 text-right">Rs {item.amount.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>
