@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { loginUser } from "../../api/auth-service";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -22,7 +22,9 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const { login } = useAuth();
-
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const from = params.get("from") || "/";
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -33,7 +35,7 @@ const Login = () => {
             toast.success(LOGIN_SUCCESS_MSG);
             // Redirect after short delay
             setTimeout(() => {
-                navigate("/");
+                navigate(from, { replace: true });
             }, 1200);
         } catch (err) {
             const errorMessage = err?.response?.data?.error || LOGIN_FAILED_MSG;
