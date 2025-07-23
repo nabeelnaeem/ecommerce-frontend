@@ -16,6 +16,7 @@ import OrderDetail from './pages/orders/OrderDetail';
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ProductProvider } from './context/ProductContext.jsx'
 import { CartProvider } from './context/CartContext.jsx';
+import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   const MAIN_CONTAINER_CLASS = "flex flex-col min-h-screen";
@@ -41,7 +42,11 @@ const App = () => {
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/profile" element={<Profile />} />
                   {/* Orders */}
-                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/orders" element={
+                    <PrivateRoute>
+                      <Orders />
+                    </PrivateRoute>
+                  } />
                   <Route path="/orders/:order_id" element={<OrderDetail />} />
                   {/* Product */}
                   <Route path="/products" element={<ProductsStore />} />

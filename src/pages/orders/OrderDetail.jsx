@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 import { Receipt } from 'lucide-react';
@@ -30,7 +30,7 @@ const OrderDetail = () => {
     const { order_id } = useParams();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchOrder = async () => {
             try {
@@ -40,6 +40,9 @@ const OrderDetail = () => {
                 toast.error(FAILED_ORDER_LOAD_MESSAGE);
             } finally {
                 setLoading(false);
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000);
             }
         };
 
