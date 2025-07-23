@@ -1,12 +1,14 @@
 import { CreditCard } from 'lucide-react';
-
+const RECEIPT_PHONE_MSG = 'Send the recipet to 03058912118 with Order ID'
 const PaymentMethods = ({ selectedMethod, setSelectedMethod }) => {
     const methods = [
-        { id: 'easypaisa', name: 'Easypaisa', icon: '📱' },
-        { id: 'jazzcash', name: 'JazzCash', icon: '💳' },
-        { id: 'cash_on_delivery', name: 'Cash on Delivery', icon: '💵' },
-        { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦' }
+        { id: 'easypaisa', name: 'Easypaisa', icon: '📱', info: `Pay using your Easypaisa mobile account. EASYPAISA ACCOUNT # 0000000000` },
+        { id: 'jazzcash', name: 'JazzCash', icon: '💳', info: `Pay using your Easypaisa mobile account. JAZZCASH ACCOUNT # 0000000000` },
+        { id: 'cash_on_delivery', name: 'Cash on Delivery', icon: '💵', info: 'Pay with cash when the order arrives.' },
+        { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦', info: `Pay using your Easypaisa mobile account. HBL, ACCOUNT# 0000000000` }
     ];
+
+    const selectedInfo = methods.find(m => m.id === selectedMethod)?.info;
 
     return (
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden text-center">
@@ -33,6 +35,15 @@ const PaymentMethods = ({ selectedMethod, setSelectedMethod }) => {
                     </button>
                 ))}
             </div>
+
+            {selectedInfo && (
+                <div className="px-6 pb-6 text-sm text-gray-600">
+                    <div className="mt-2 rounded-md bg-indigo-50 text-indigo-800 p-3 inline-block">
+                        {selectedInfo} <br></br>
+                        {RECEIPT_PHONE_MSG}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
