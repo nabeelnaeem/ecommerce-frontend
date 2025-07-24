@@ -89,7 +89,8 @@ const Signup = () => {
                 Already have an account?{" "}
                 <Link to={`/login?from=${encodeURIComponent(from)}`} className={LOGIN_LINK_CLASS}>
                     Log in
-                </Link>            </p>
+                </Link>
+            </p>
         </div>
     );
 };
