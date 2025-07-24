@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/auth-service";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { registerUser, loginUser } from "../../api/auth-service";
 import InputField from "../../components/InputField.jsx";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
 
 // Class Constants
@@ -22,6 +23,11 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+    const { login } = useAuth();
+
+    const params = new URLSearchParams(location.search);
+    const from = params.get("from") || "/";
 
     const usernameValidation = /^[a-zA-Z0-9]+$/;
 
@@ -34,9 +40,19 @@ const Signup = () => {
         }
 
         try {
+            //Signup
             const data = await registerUser({ username, password, email });
-            toast.success(data.message || "Signup successful");
-            setTimeout(() => navigate("/login"), 1000);
+
+            //autologin
+            const { accessToken, user } = await loginUser({ username, password });
+            localStorage.setItem("accessToken", accessToken);
+            login(user);
+
+            toast.success(data.message || "Signup successful, logging in");
+            setTimeout(() => {
+                navigate(from, { replace: true });
+            }, 1200);
+
         } catch (error) {
             const errMsg = error?.response?.data?.error || SIGNUP_FAILED_MSG;
             toast.error(errMsg);
@@ -71,9 +87,9 @@ const Signup = () => {
             </form>
             <p className={PARAGRAPH_CLASS}>
                 Already have an account?{" "}
-                <Link to="/login" className={LOGIN_LINK_CLASS}>Log in</Link>
-            </p>
-            {/* <ToastContainer position="top-center" autoClose={1500} /> */}
+                <Link to={`/login?from=${encodeURIComponent(from)}`} className={LOGIN_LINK_CLASS}>
+                    Log in
+                </Link>            </p>
         </div>
     );
 };
