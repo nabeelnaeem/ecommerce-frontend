@@ -3,6 +3,10 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
+import { logoutUser, refreshTokenAccess } from "../api/auth-service.js";
+
+const REFRESH_REQUEST_TIMER = 5; // If expire time is less than these seconds, refresh request will be sent
+const CHECK_INTERVAL = 5 * 1000; // a * 1000 a seconds
 
 const AuthContext = createContext({
     user: null,
@@ -12,40 +16,41 @@ const AuthContext = createContext({
     logout: () => { },
 });
 
-
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const { clearCart } = useCart();
     const logoutTimer = useRef(null);
+    const refreshInterval = useRef(null);
     const navigate = useNavigate();
 
     const clearAuth = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
         setUser(null);
         clearCart();
         navigate(0);
-        console.log(path);
     };
 
-    const logoutAndNotify = () => {
+    const logoutAndNotify = async () => {
         toast.error("🔒 Session expired. Please log in again.");
         setTimeout(() => {
             clearAuth();
         }, 1500);
+        await logoutUser();
     };
 
-    const login = (user) => {
-        setUser(user);
-        setupTokenAutoLogout();
+    const logout = async () => {
+        try {
+            await logoutUser();
+        } catch (error) {
+            console.log("Logout API failed:", error);
+        } finally {
+            clearAuth();
+        }
     };
 
-    const logout = () => {
-        clearAuth();
-    };
-
-    const setupTokenAutoLogout = () => {
-        const token = localStorage.getItem("token");
+    const setLogoutTimer = () => {
+        const token = localStorage.getItem("accessToken");
         if (!token) return;
 
         try {
@@ -53,21 +58,69 @@ export const AuthProvider = ({ children }) => {
             const currentTime = Date.now() / 1000;
             const timeLeft = decoded.exp - currentTime;
 
-            if (timeLeft <= 0) {
+            if (logoutTimer.current) clearTimeout(logoutTimer.current);
+            logoutTimer.current = setTimeout(() => {
                 logoutAndNotify();
-            } else {
-                if (logoutTimer.current) clearTimeout(logoutTimer.current);
-                logoutTimer.current = setTimeout(() => {
-                    logoutAndNotify();
-                }, timeLeft * 1000);
-            }
-        } catch (err) {
+            }, timeLeft * 1000);
+        } catch {
             logoutAndNotify();
         }
     };
 
+    const setupAutoRefresh = () => {
+        refreshInterval.current = setInterval(async () => {
+            const token = localStorage.getItem("accessToken");
+            if (!token) return;
+
+            try {
+                const decoded = jwtDecode(token);
+                const currentTime = Date.now() / 1000;
+                const timeLeft = decoded.exp - currentTime;
+
+                // Refresh if less than 60 seconds left
+                if (timeLeft < REFRESH_REQUEST_TIMER) {
+                    const newToken = await refreshTokenAccess();
+                    localStorage.setItem("accessToken", newToken);
+
+                    const decodedNew = jwtDecode(newToken);
+                    setUser({
+                        user_id: decodedNew.user_id,
+                        username: decodedNew.username,
+                        email: decodedNew.email,
+                    });
+
+                    setLogoutTimer();
+                }
+            } catch {
+                logoutAndNotify();
+            }
+        }, CHECK_INTERVAL); //checks every 1 mins
+    };
+
+    const setupStorageListener = () => {
+        const onStorage = (e) => {
+            if (e.key === "accessToken") {
+                setLogoutTimer();
+            }
+        };
+        window.addEventListener("storage", onStorage);
+
+        setLogoutTimer();
+
+        return () => {
+            window.removeEventListener("storage", onStorage);
+            if (logoutTimer.current) clearTimeout(logoutTimer.current);
+        };
+    };
+
+    const login = (user) => {
+        setUser(user);
+        setupAutoRefresh();
+        setupStorageListener();
+    };
+
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         if (!token) {
             setUser(null);
             setLoading(false);
@@ -86,9 +139,12 @@ export const AuthProvider = ({ children }) => {
                     username: decoded.username,
                     email: decoded.email,
                 });
-                setupTokenAutoLogout();
+
+                setupAutoRefresh();
+                const cleanup = setupStorageListener();
+                return cleanup;
             }
-        } catch (err) {
+        } catch {
             logoutAndNotify();
         } finally {
             setLoading(false);

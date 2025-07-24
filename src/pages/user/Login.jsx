@@ -29,8 +29,8 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const { token, user } = await loginUser({ username, password });
-            localStorage.setItem("token", token);
+            const { accessToken, user } = await loginUser({ username, password });
+            localStorage.setItem("accessToken", accessToken);
             login(user); // Update context
             toast.success(LOGIN_SUCCESS_MSG);
             // Redirect after short delay

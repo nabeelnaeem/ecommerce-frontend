@@ -12,7 +12,7 @@ import OrderPageHeader from '../../components/OrderPageHeader.jsx';
 
 // Layout & Spacing
 const MAX_WIDTH_CONTAINER = 'max-w-7xl mx-auto px-4 py-8';
-const GRID_LAYOUT = 'grid grid-cols-1 lg:grid-cols-2 gap-12';
+const GRID_LAYOUT = 'grid grid-cols-1 lg:grid-cols-2 gap-12 mt-6';
 const SPACE_Y_4 = 'space-y-4';
 const SPACE_Y_6 = 'space-y-6';
 const SPACE_X_8 = 'flex space-x-8';
