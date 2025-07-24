@@ -1,6 +1,6 @@
 import { User, ChevronDown } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useClickOutside from '../hooks/useClickOutside';
 import { useEffect } from 'react';
 
@@ -21,6 +21,9 @@ const LOGOUT_BUTTON_CLASS = 'block w-full text-left px-4 py-2 text-gray-700 hove
 const UserProfile = ({ user, onLogout }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const location = useLocation();
+    const currentPath = location.pathname + location.search;
+    const loginLink = `/login?from=${encodeURIComponent(currentPath)}`
 
     useClickOutside(dropdownRef, () => setIsDropdownOpen(false), isDropdownOpen);
 
@@ -30,7 +33,7 @@ const UserProfile = ({ user, onLogout }) => {
 
     if (!user) {
         return (
-            <Link to="/login" className={LOGIN_BUTTON_CLASS}>
+            <Link to={loginLink} className={LOGIN_BUTTON_CLASS}>
                 <User className={LOGIN_ICON_CLASS} />
                 <span>Login</span>
             </Link>

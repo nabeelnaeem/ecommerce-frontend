@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { data, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // Constants for classnames and strings
 const CONTAINER_CLASSES = "min-h-screen bg-gray-50";
@@ -42,7 +42,13 @@ const ThankYou = () => {
                 <div className={GRID_CLASSES}>
                     <div>
                         <span className={LABEL_CLASSES}>Order ID:</span>
-                        <div className={VALUE_CLASSES}>{order_id}</div>
+                        <div className={VALUE_CLASSES}>
+                            <Link
+                                to={`/orders/${order_id}`}
+                                className="text-blue-600 hover:underline break-all"
+                            >
+                                {order_id} <br></br>(Click for Details)
+                            </Link></div>
                     </div>
                     <div>
                         <span className={LABEL_CLASSES}>Tracking ID:</span>
