@@ -8,11 +8,13 @@ const GuestRoute = ({ children }) => {
     if (loading) return null;
 
     if (isAuthenticated) {
-        return <Navigate to={location.state?.from || "/products"} replace />;
+        // Extract ?from=... from URL
+        const params = new URLSearchParams(location.search);
+        const from = params.get("from") || "/";
+        return <Navigate to={from} replace />;
     }
 
     return children;
 };
 
 export default GuestRoute;
-
