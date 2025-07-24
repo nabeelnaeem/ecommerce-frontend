@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const clearAuth = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
         setUser(null);
         clearCart();
         navigate(0);
@@ -45,11 +45,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     const setupTokenAutoLogout = () => {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
 
         try {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(accessToken);
             const currentTime = Date.now() / 1000;
             const timeLeft = decoded.exp - currentTime;
 
@@ -67,15 +67,15 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
             setUser(null);
             setLoading(false);
             return;
         }
 
         try {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(accessToken);
             const currentTime = Date.now() / 1000;
 
             if (decoded.exp < currentTime) {
