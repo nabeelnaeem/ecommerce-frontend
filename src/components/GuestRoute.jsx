@@ -5,11 +5,10 @@ const GuestRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
     const location = useLocation();
 
-    if (loading) return null; // or a loading spinner
+    if (loading) return null;
 
     if (isAuthenticated) {
-        // Redirect authenticated users away from login/signup
-        return <Navigate to={location.state?.from || "/"} replace />;
+        return <Navigate to={location.state?.from || "/products"} replace />;
     }
 
     return children;

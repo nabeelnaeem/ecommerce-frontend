@@ -17,6 +17,7 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { ProductProvider } from './context/ProductContext.jsx'
 import { CartProvider } from './context/CartContext.jsx';
 import PrivateRoute from './components/PrivateRoute';
+import GuestRoute from './components/GuestRoute';
 
 const App = () => {
   const MAIN_CONTAINER_CLASS = "flex flex-col min-h-screen";
@@ -38,8 +39,17 @@ const App = () => {
                   {/* Root */}
                   <Route path="/" element={<Home />} />
                   {/* User */}
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={
+                    <GuestRoute>
+                      <Login />
+                    </GuestRoute>
+                  } />
+
+                  <Route path="/signup" element={
+                    <GuestRoute>
+                      <Signup />
+                    </GuestRoute>
+                  } />
                   <Route path="/profile" element={<Profile />} />
                   {/* Orders */}
                   <Route path="/orders" element={
