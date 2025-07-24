@@ -3,8 +3,8 @@ import { fetchUserOrders } from '../../api/order-service';
 import OrderPageHeader from '../../components/OrderPageHeader';
 import { ShoppingBag } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../context/AuthContext'; // ✅ Use this
-import UserOrderCard from '../../components/UserOrderCard'; // ✅ new import
+import { useAuth } from '../../context/AuthContext'; // 
+import UserOrderCard from '../../components/UserOrderCard'; // 
 
 // Classes
 const PAGE_CLASS = "min-h-screen bg-gray-50";

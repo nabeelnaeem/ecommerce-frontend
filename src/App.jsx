@@ -50,21 +50,33 @@ const App = () => {
                       <Signup />
                     </GuestRoute>
                   } />
-                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile" element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  } />
                   {/* Orders */}
                   <Route path="/orders" element={
                     <PrivateRoute>
                       <Orders />
                     </PrivateRoute>
                   } />
-                  <Route path="/orders/:order_id" element={<OrderDetail />} />
+                  <Route path="/orders/:order_id" element={
+                    <PrivateRoute>
+                      <OrderDetail />
+                    </PrivateRoute>
+                  } />
                   {/* Product */}
                   <Route path="/products" element={<ProductsStore />} />
                   <Route path="/products/:id" element={<ProductDetail />} />
                   {/* Cart */}
                   <Route path="/cart" element={<Cart />} />
                   {/* Checkout */}
-                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/checkout" element={
+                    <PrivateRoute>
+                      <Checkout />
+                    </PrivateRoute>
+                  } />
                   <Route path="/thank-you" element={<Thankyou />} />
                 </Routes>
               </div>

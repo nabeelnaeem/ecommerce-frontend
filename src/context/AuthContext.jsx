@@ -5,6 +5,9 @@ import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 import { logoutUser, refreshTokenAccess } from "../api/auth-service.js";
 
+const REFRESH_REQUEST_TIMER = 5; // If expire time is less than these seconds, refresh request will be sent
+const CHECK_INTERVAL = 5 * 1000; // a * 1000 a seconds
+
 const AuthContext = createContext({
     user: null,
     isAuthenticated: false,
@@ -28,11 +31,12 @@ export const AuthProvider = ({ children }) => {
         navigate(0);
     };
 
-    const logoutAndNotify = () => {
+    const logoutAndNotify = async () => {
         toast.error("🔒 Session expired. Please log in again.");
         setTimeout(() => {
             clearAuth();
         }, 1500);
+        await logoutUser();
     };
 
     const logout = async () => {
@@ -74,7 +78,7 @@ export const AuthProvider = ({ children }) => {
                 const timeLeft = decoded.exp - currentTime;
 
                 // Refresh if less than 60 seconds left
-                if (timeLeft < 60) {
+                if (timeLeft < REFRESH_REQUEST_TIMER) {
                     const newToken = await refreshTokenAccess();
                     localStorage.setItem("accessToken", newToken);
 
@@ -90,7 +94,7 @@ export const AuthProvider = ({ children }) => {
             } catch {
                 logoutAndNotify();
             }
-        }, 1 * 60 * 1000); //checks every 1 mins
+        }, CHECK_INTERVAL); //checks every 1 mins
     };
 
     const setupStorageListener = () => {
