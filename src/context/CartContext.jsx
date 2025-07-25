@@ -8,16 +8,23 @@ export const CartProvider = ({ children }) => {
         return storedCart ? JSON.parse(storedCart) : [];
     });
 
+    const [isCartOpen, setIsCartOpen] = useState(false);
+
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
+
+    // 🔹 Cart dropdown controls
+    const openCart = () => setIsCartOpen(true);
+    const closeCart = () => setIsCartOpen(false);
+    const toggleCart = () => setIsCartOpen(prev => !prev);
 
     const addToCart = (product, quantity = 1) => {
         setCart(prev => {
             const existing = prev.find(item => item.product_id === product.product_id);
             if (existing) {
                 const newQty = existing.quantity + quantity;
-                if (newQty > product.stock) return prev; // 👈 prevents overstock
+                if (newQty > product.stock) return prev; // prevent overstock
                 return prev.map(item =>
                     item.product_id === product.product_id
                         ? { ...item, quantity: newQty }
@@ -31,18 +38,18 @@ export const CartProvider = ({ children }) => {
     };
 
     const updateQuantity = (productId, change) => {
-        setCart(prev => {
-            return prev.map(item => {
+        setCart(prev =>
+            prev.map(item => {
                 if (item.product_id !== productId) return item;
 
                 const newQty = item.quantity + change;
 
-                if (newQty <= 0) return item; // optionally remove item if 0?
+                if (newQty <= 0) return item; // optionally remove if 0
                 if (newQty > item.stock) return item; // prevent overstock
 
                 return { ...item, quantity: newQty };
-            });
-        });
+            })
+        );
     };
 
     const removeFromCart = (productId) => {
@@ -55,7 +62,20 @@ export const CartProvider = ({ children }) => {
     };
 
     return (
-        <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, clearCart, updateQuantity }}>
+        <CartContext.Provider
+            value={{
+                cart,
+                setCart,
+                addToCart,
+                removeFromCart,
+                clearCart,
+                updateQuantity,
+                isCartOpen,
+                openCart,
+                closeCart,
+                toggleCart
+            }}
+        >
             {children}
         </CartContext.Provider>
     );
