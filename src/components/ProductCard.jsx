@@ -32,6 +32,7 @@ const CART_BADGE_CLASS = "absolute -top-1 -right-1 bg-green-600 text-white text-
 
 const ProductCard = ({ product, onAddToCart }) => {
     const [quantity, setQuantity] = useState(1);
+    const [loading, setLoading] = useState(false);
     const { cart } = useCart();
     const cartItem = cart.find(item => item.product_id === product.product_id);
     const quantityInCart = cartItem ? cartItem.quantity : 0;
@@ -44,9 +45,13 @@ const ProductCard = ({ product, onAddToCart }) => {
     };
 
     const handleAddToCart = () => {
+        setLoading(true);
         onAddToCart(product, quantity);
-        toast.success(`${product.name} (x${quantity}) added to your cart`);
+        // toast.success(`${product.name} (x${quantity}) added to your cart`);
         setQuantity(1);
+        setTimeout(() => {
+            setLoading(false);
+        }, 200);
     };
 
     return (
@@ -121,7 +126,7 @@ const ProductCard = ({ product, onAddToCart }) => {
                             }`}
                     >
                         <ShoppingCart className={SHOPPING_CART_ICON_CLASS} />
-                        Add to Cart
+                        {loading ? "Adding..." : "Add to cart"}
                     </button>
 
                     {quantityInCart > 0 && (
