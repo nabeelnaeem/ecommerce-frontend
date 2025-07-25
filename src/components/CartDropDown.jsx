@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { ShoppingCart, X, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
 import useClickOutside from '../hooks/useClickOutside.js';
 
-//Classes
+// Classes
 const CART_BUTTON_CLASS = 'relative flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200';
 const CART_ICON_CLASS = 'w-5 h-5';
 const CART_TEXT_CLASS = 'hidden sm:inline';
@@ -23,17 +23,17 @@ const VIEW_CART_LINK_CONTAINER_CLASS = 'text-center';
 const VIEW_CART_LINK_CLASS = "mb-5 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-semibold text-base transition-colors duration-200";
 
 const CartDropdown = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const { cart, removeFromCart } = useCart();
+    const { cart, removeFromCart, isCartOpen, toggleCart, closeCart } = useCart();
     const dropdownRef = useRef(null);
 
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    useClickOutside(dropdownRef, () => setIsOpen(false), isOpen);
+    // Close on click outside
+    useClickOutside(dropdownRef, closeCart, isCartOpen);
 
     return (
         <div className="relative" ref={dropdownRef}>
-            <button onClick={() => setIsOpen(!isOpen)} className={CART_BUTTON_CLASS}>
+            <button onClick={toggleCart} className={CART_BUTTON_CLASS}>
                 <ShoppingCart className={CART_ICON_CLASS} />
                 <span className={CART_TEXT_CLASS}>Cart</span>
                 {itemCount > 0 && (
@@ -41,16 +41,15 @@ const CartDropdown = () => {
                 )}
             </button>
 
-            {isOpen && (
+            {isCartOpen && (
                 <div className={DROPDOWN_CONTAINER_CLASS}>
                     <div className={DROPDOWN_CONTENT_CLASS}>
-
                         {cart.length !== 0 ? (
                             <div className={VIEW_CART_LINK_CONTAINER_CLASS}>
                                 <Link
                                     to="/cart"
                                     className={VIEW_CART_LINK_CLASS}
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={closeCart}
                                 >
                                     SHOW FULL CART
                                     <ShoppingCart className={CART_ICON_CLASS} />
@@ -58,40 +57,38 @@ const CartDropdown = () => {
                                 <Link
                                     to="/checkout"
                                     className={VIEW_CART_LINK_CLASS}
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={closeCart}
                                 >
                                     CHECKOUT NOW
                                     <ArrowRight className={CART_ICON_CLASS} />
                                 </Link>
-                            </div>) : <></>
-                        }
-
-                        {cart.length === 0 ? (
-                            <p className={EMPTY_CART_TEXT_CLASS}>Your cart is empty</p>
+                            </div>
                         ) : (
-                            <>
-                                <ul className={CART_ITEM_LIST_CLASS}>
-                                    {cart.map(item => (
-                                        <li key={item.product_id} className={CART_ITEM_CLASS}>
-                                            <img
-                                                src={item.image || `https://placehold.co/50x50?text=${encodeURIComponent(item.name)}`}
-                                                className={CART_IMAGE_CLASS}
-                                                alt={item.name}
-                                            />
-                                            <div className="flex-1">
-                                                <p className={ITEM_NAME_CLASS}>{item.name}</p>
-                                                <p className={ITEM_QUANTITY_CLASS}>Qty: {item.quantity}</p>
-                                            </div>
-                                            <button
-                                                onClick={() => removeFromCart(item.product_id)}
-                                                className={REMOVE_ITEM_BUTTON_CLASS}
-                                            >
-                                                <X className={REMOVE_ITEM_ICON_CLASS} />
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
+                            <p className={EMPTY_CART_TEXT_CLASS}>Your cart is empty</p>
+                        )}
+
+                        {cart.length > 0 && (
+                            <ul className={CART_ITEM_LIST_CLASS}>
+                                {cart.map(item => (
+                                    <li key={item.product_id} className={CART_ITEM_CLASS}>
+                                        <img
+                                            src={item.image || `https://placehold.co/50x50?text=${encodeURIComponent(item.name)}`}
+                                            className={CART_IMAGE_CLASS}
+                                            alt={item.name}
+                                        />
+                                        <div className="flex-1">
+                                            <p className={ITEM_NAME_CLASS}>{item.name}</p>
+                                            <p className={ITEM_QUANTITY_CLASS}>Qty: {item.quantity}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => removeFromCart(item.product_id)}
+                                            className={REMOVE_ITEM_BUTTON_CLASS}
+                                        >
+                                            <X className={REMOVE_ITEM_ICON_CLASS} />
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
                         )}
                     </div>
                 </div>
