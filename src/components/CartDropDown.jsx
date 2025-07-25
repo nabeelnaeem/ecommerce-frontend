@@ -21,6 +21,9 @@ const REMOVE_ITEM_BUTTON_CLASS = 'text-gray-400 hover:text-red-600';
 const REMOVE_ITEM_ICON_CLASS = 'w-4 h-4';
 const VIEW_CART_LINK_CONTAINER_CLASS = 'text-center';
 const VIEW_CART_LINK_CLASS = "mb-5 inline-flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 font-semibold text-base transition-colors duration-200";
+const CART_LINK_BUTTON = "w-full flex items-center justify-between px-4 py-3 rounded-lg shadow hover:shadow-md transition duration-200 font-semibold";
+const VIEW_CART_STYLE = "bg-gray-100 text-gray-700 hover:bg-gray-200";
+const CHECKOUT_STYLE = "bg-blue-600 text-white hover:bg-blue-700";
 
 const CartDropdown = () => {
     const { cart, removeFromCart, isCartOpen, toggleCart, closeCart } = useCart();
@@ -45,21 +48,21 @@ const CartDropdown = () => {
                 <div className={DROPDOWN_CONTAINER_CLASS}>
                     <div className={DROPDOWN_CONTENT_CLASS}>
                         {cart.length !== 0 ? (
-                            <div className={VIEW_CART_LINK_CONTAINER_CLASS}>
+                            <div className="space-y-2 mb-4">
                                 <Link
                                     to="/cart"
-                                    className={VIEW_CART_LINK_CLASS}
+                                    className={`${CART_LINK_BUTTON} ${VIEW_CART_STYLE}`}
                                     onClick={closeCart}
                                 >
-                                    SHOW FULL CART
+                                    <span>Show Full Cart</span>
                                     <ShoppingCart className={CART_ICON_CLASS} />
                                 </Link>
                                 <Link
                                     to="/checkout"
-                                    className={VIEW_CART_LINK_CLASS}
+                                    className={`${CART_LINK_BUTTON} ${CHECKOUT_STYLE}`}
                                     onClick={closeCart}
                                 >
-                                    CHECKOUT NOW
+                                    <span>Checkout Now</span>
                                     <ArrowRight className={CART_ICON_CLASS} />
                                 </Link>
                             </div>
