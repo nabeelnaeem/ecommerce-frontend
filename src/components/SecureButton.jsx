@@ -1,5 +1,6 @@
 import { Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Spin } from 'antd';
 
 const BASE_BUTTON_CLASSES =
     "w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg transition-all transform shadow-lg";
@@ -16,6 +17,7 @@ const SecureButton = ({
     to = null,
     onClick = null,
     disabled = false,
+    spinner = false,
 }) => {
     const className = `${BASE_BUTTON_CLASSES} ${disabled ? DISABLED_CLASSES : ENABLED_HOVER_CLASSES
         }`;
@@ -42,7 +44,7 @@ const SecureButton = ({
             onClick={onClick}
             disabled={disabled}
         >
-            {content}
+            {spinner ? (<><Spin />{content}</>) : content}
         </button>
     );
 };

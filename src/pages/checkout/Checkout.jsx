@@ -13,6 +13,7 @@ import { CreditCard } from 'lucide-react';
 import OrderPageHeader from '../../components/OrderPageHeader';
 import OrderSummary from '../../components/OrderSummary.jsx';
 
+
 // Constants
 const SHIPPING_RATES = {
     standard: 150,
@@ -135,11 +136,19 @@ const Checkout = () => {
                             shipping={shipping}
                             total={total}
                         />
-                        <SecureButton
-                            label="Complete Order"
-                            onClick={handleSubmit}
-                            disabled={!isFormValid || loading}
-                        />
+                        {loading ? (
+                            <SecureButton
+                                label="Placing Your Order ..."
+                                disabled={true}
+                                spinner={true}
+                            />) : (
+                            <SecureButton
+                                label="Complete Order"
+                                onClick={handleSubmit}
+                                disabled={!isFormValid || loading}
+                            />
+                        )}
+
                         <TrustIndicators />
                     </div>
                 </div>
