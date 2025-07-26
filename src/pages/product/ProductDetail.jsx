@@ -10,6 +10,9 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
 import OrderPageHeader from '../../components/OrderPageHeader.jsx';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
+
 // Layout & Spacing
 const MAX_WIDTH_CONTAINER = 'max-w-7xl mx-auto px-4 py-8';
 const GRID_LAYOUT = 'grid grid-cols-1 lg:grid-cols-2 gap-12 mt-6';
@@ -169,8 +172,9 @@ const ProductDetail = () => {
             <div className={GRID_LAYOUT}>
                 <div className={SPACE_Y_4}>
                     <img
-                        src={product.image || `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
-                        alt={product.name}
+                        src={product.image_url
+                            ? `${STATIC_BASE_URL}/images/${product.image_url}`
+                            : `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`} alt={product.name}
                         className={IMAGE_STYLE}
                     />
                 </div>

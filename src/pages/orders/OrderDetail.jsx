@@ -4,7 +4,8 @@ import api from '../../api/api';
 import { toast } from 'react-toastify';
 import { Receipt } from 'lucide-react';
 import OrderPageHeader from '../../components/OrderPageHeader';
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
 // Classname Constants
 const PAGE_CLASS = "min-h-screen bg-gray-50";
 const CONTAINER_CLASS = "max-w-5xl mx-auto px-4 py-10 space-y-10";
@@ -104,8 +105,9 @@ const OrderDetail = () => {
                         <div key={item.product_id} className={ITEM_CONTAINER}>
                             <div className={ITEM_IMAGE_CONTAINER}>
                                 <img
-                                    src={item.image || `https://placehold.co/100x100?text=${encodeURIComponent(item.product_name)}`}
-                                    alt={item.product_name}
+                                    src={item.image_url
+                                        ? `${STATIC_BASE_URL}/images/${item.image_url}`
+                                        : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} alt={item.product_name}
                                     className={ITEM_IMAGE}
                                 />
                                 <div className={ITEM_DETAILS_CONTAINER}>

@@ -4,6 +4,9 @@ import { useCart } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
 import useClickOutside from '../hooks/useClickOutside.js';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
+
 // Classes
 const CART_BUTTON_CLASS = 'relative flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200';
 const CART_ICON_CLASS = 'w-5 h-5';
@@ -75,8 +78,9 @@ const CartDropdown = () => {
                                 {cart.map(item => (
                                     <li key={item.product_id} className={CART_ITEM_CLASS}>
                                         <img
-                                            src={item.image || `https://placehold.co/50x50?text=${encodeURIComponent(item.name)}`}
-                                            className={CART_IMAGE_CLASS}
+                                            src={item.image_url
+                                                ? `${STATIC_BASE_URL}/images/${item.image_url}`
+                                                : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} className={CART_IMAGE_CLASS}
                                             alt={item.name}
                                         />
                                         <div className="flex-1">

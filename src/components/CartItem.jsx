@@ -1,5 +1,8 @@
 import { Trash2, Plus, Minus } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
+
 const TRANSITION_CLASS = "transition-colors";
 const SHADOW_CLASS = "shadow-md";
 const ITEM_CLASS = "p-6 hover:bg-gray-50";
@@ -28,8 +31,9 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => {
             <div className={ITEM_INNER_CLASS}>
                 <div className={IMAGE_CONTAINER_CLASS}>
                     <img
-                        src={item.image || `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`}
-                        alt={item.name}
+                        src={item.image_url
+                            ? `${STATIC_BASE_URL}/images/${item.image_url}`
+                            : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} alt={item.name}
                         className={`${IMAGE_CLASS} ${SHADOW_CLASS}`}
                     />
                 </div>

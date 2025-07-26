@@ -4,12 +4,15 @@ import RenderStars from './RenderStars.jsx';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
+
 const BUTTON_CLASS = "px-4 py-2 rounded-lg font-medium transition-colors";
 const BUTTON_PRIMARY = `${BUTTON_CLASS} bg-blue-600 text-white hover:bg-blue-700`;
 const BUTTON_DISABLED = `${BUTTON_CLASS} text-gray-400 cursor-not-allowed bg-gray-100`;
 const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
 const PRODUCT_IMAGE_CONTAINER = "aspect-w-1 aspect-h-1 bg-gray-200";
-const PRODUCT_IMAGE = "w-full h-48 object-cover";
+const PRODUCT_IMAGE = "w-full h-60 object-cover";
 const PRODUCT_INFO_CONTAINER = "p-4";
 const PRODUCT_TITLE = "text-lg font-semibold text-gray-900 mb-2 overflow-hidden";
 const PRICE_STOCK_CONTAINER = "flex justify-between items-center mb-3";
@@ -56,7 +59,9 @@ const ProductCard = ({ product }) => {
             <Link to={`/products/${product.product_id}`}>
                 <div className={PRODUCT_IMAGE_CONTAINER}>
                     <img
-                        src={product.image || `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
+                        src={product.image_url
+                            ? `${STATIC_BASE_URL}/images/${product.image_url}`
+                            : `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
                         alt={product.name}
                         className={PRODUCT_IMAGE}
                     />
