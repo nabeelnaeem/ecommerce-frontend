@@ -1,7 +1,8 @@
 import api from './api';
+
 const FAILED_TO_FETCH_MESSAGE = "Failed to fetch products";
 
-export const fetchProductsFromApi = async ({ page, limit, sortBy, sortOrder, name }) => {
+export const fetchProductsFromApi = async ({ page, limit, sortBy, sortOrder, name, stock, rating }) => {
     try {
         const response = await api.get('/products', {
             params: {
@@ -9,7 +10,9 @@ export const fetchProductsFromApi = async ({ page, limit, sortBy, sortOrder, nam
                 limit,
                 sortBy,
                 sortOrder,
-                ...(name?.trim() && { name }), // add name only if it exists and is not empty
+                ...(name?.trim() && { name }),
+                ...(stock && { stock }),
+                ...(rating && { rating }),
             }
         });
         return response.data;
