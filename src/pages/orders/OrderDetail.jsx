@@ -88,7 +88,7 @@ const OrderDetail = () => {
                 {/* ✅ Order Info */}
                 <div className={SECTION_CLASS}>
                     <h2 className={SECTION_TITLE_CLASS}>🧾 Order Summary</h2>
-                    <div className={ROW_CLASS}><span className={LABEL_CLASS}>Order ID</span><span className={VALUE_CLASS}>#{order.order_id}</span></div>
+                    <div className={ROW_CLASS}><span className={LABEL_CLASS}>Order ID</span><span className={VALUE_CLASS}>ORD-{order.order_id.slice(0, 8).toUpperCase()}</span></div>
                     <div className={ROW_CLASS}><span className={LABEL_CLASS}>Status</span>
                         <span className={`${VALUE_CLASS}`}>
                             <span className={STATUS_BADGE_CLASS}>{order.status}</span>
