@@ -257,14 +257,6 @@ const Home = () => {
                                 </button>
                             </Link>
                         </div>
-
-                        <div className={`${FLEX_CENTER} ${MT_8} ${TEXT_SM} ${TEXT_GRAY_500}`}>
-                            <Check className={`${ICON_SM} ${MR_2} ${TEXT_GREEN_500}`} />
-                            Free shipping on orders over Rs 2500
-                            <span className={MX_3}>•</span>
-                            <Check className={`${ICON_SM} ${MR_2} ${TEXT_GREEN_500}`} />
-                            30-day money-back guarantee
-                        </div>
                     </div>
                 </div>
             </div>
