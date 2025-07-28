@@ -9,6 +9,7 @@ const api = axios.create({
     withCredentials: true
 });
 
+// Attach Authorization header if token exists
 api.interceptors.request.use(config => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
@@ -16,7 +17,6 @@ api.interceptors.request.use(config => {
     }
     return config;
 });
-
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -34,33 +34,40 @@ const processQueue = (error, token = null) => {
 };
 
 api.interceptors.response.use(
-    res => res,
-    async err => {
-        const originalRequest = err.config;
+    response => response,
+    async error => {
+        const originalRequest = error.config;
 
-        if (err.response?.status === 401 && !originalRequest.retry) {
+        const isAuthRoute =
+            originalRequest.url.includes('/auth/login') ||
+            originalRequest.url.includes('/auth/signup');
+
+        // Skip refresh logic for login/signup failures
+        if (error.response?.status === 401 && !originalRequest._retry && !isAuthRoute) {
+            originalRequest._retry = true;
+
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 })
-                    .then(accessToken => {
-                        originalRequest.headers['Authorization'] = 'Bearer ' + accessToken;
+                    .then(token => {
+                        originalRequest.headers['Authorization'] = `Bearer ${token}`;
                         return api(originalRequest);
                     })
                     .catch(err => Promise.reject(err));
             }
-            originalRequest.retry = true;
+
             isRefreshing = true;
 
             try {
                 const newToken = await refreshTokenAccess();
                 localStorage.setItem('accessToken', newToken);
                 processQueue(null, newToken);
-                originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+                originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
                 return api(originalRequest);
             } catch (refreshErr) {
                 processQueue(refreshErr, null);
-                localStorage.removeItem("accessToken");
+                localStorage.removeItem('accessToken');
                 window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`;
                 return Promise.reject(refreshErr);
             } finally {
@@ -68,7 +75,8 @@ api.interceptors.response.use(
             }
         }
 
-        return Promise.reject(err);
+        return Promise.reject(error);
     }
 );
+
 export default api;
