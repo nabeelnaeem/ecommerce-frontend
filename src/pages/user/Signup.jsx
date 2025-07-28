@@ -73,18 +73,21 @@ const Signup = () => {
                     placeholder="User Name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                 />
                 <InputField
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                 />
                 <InputField
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <button type="submit" className={loading ? SIGNUP_BUTTON_CLASS_DISABLED : SIGNUP_BUTTON_CLASS} disabled={loading}>
                     {loading ? "Signing up..." : "Sign up"}
