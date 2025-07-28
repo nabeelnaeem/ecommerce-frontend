@@ -26,7 +26,7 @@ const PADDING_Y_8 = 'py-8';
 const TEXT_CENTER = 'text-center';
 
 // Component Styles
-const IMAGE_STYLE = 'w-full h-96 lg:h-[400px] object-cover rounded-lg';
+const IMAGE_STYLE = 'w-full h-96 lg:h-[500px] object-cover rounded-lg';
 const TAB_CONTAINER = 'border-b border-gray-200';
 const TAB_BUTTON_BASE = 'py-4 px-1 border-b-2 font-medium text-sm transition-colors';
 const TAB_BUTTON_ACTIVE = 'py-4 px-1 border-b-2 font-medium text-sm transition-colors border-blue-500 text-blue-600';
