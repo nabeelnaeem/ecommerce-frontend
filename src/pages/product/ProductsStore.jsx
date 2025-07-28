@@ -33,6 +33,8 @@ const ProductsStore = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(12);
+    const [stockFilter, setStockFilter] = useState('');
+    const [ratingFilter, setRatingFilter] = useState('');
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -45,6 +47,8 @@ const ProductsStore = () => {
                 sortBy,
                 sortOrder,
                 name: searchTerm,
+                stock: stockFilter,
+                rating: ratingFilter
             });
 
             if (data.products) {
@@ -64,7 +68,7 @@ const ProductsStore = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [currentPage, limit, sortBy, sortOrder, searchTerm]);
+    }, [currentPage, limit, sortBy, sortOrder, searchTerm, stockFilter, ratingFilter]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -99,8 +103,13 @@ const ProductsStore = () => {
                 setSortOrder={setSortOrder}
                 limit={limit}
                 setLimit={setLimit}
+                stockFilter={stockFilter}
+                setStockFilter={setStockFilter}
+                ratingFilter={ratingFilter}
+                setRatingFilter={setRatingFilter}
                 handleSearch={handleSearch}
             />
+
 
             {/* Loading State */}
             {loading && <LoadingIndicator />}
