@@ -1,4 +1,6 @@
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { STORE_NAME } from './config/store-config.js';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/home/Home"
@@ -23,7 +25,9 @@ const App = () => {
   const MAIN_CONTAINER_CLASS = "flex flex-col min-h-screen";
   const FLEX_GROW_CLASS = "flex-grow";
 
-
+  useEffect(() => {
+    document.title = STORE_NAME;
+  }, []);
   return (
     <BrowserRouter>
       <CartProvider>
