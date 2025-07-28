@@ -5,6 +5,7 @@ import InputField from "../../components/InputField.jsx";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from 'antd';
 
 // Class Constants
 const CONTAINER_DIV_CLASS = "max-w-md mx-auto p-6";
@@ -89,9 +90,17 @@ const Signup = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type="submit" className={loading ? SIGNUP_BUTTON_CLASS_DISABLED : SIGNUP_BUTTON_CLASS} disabled={loading}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className={loading ? SIGNUP_BUTTON_CLASS_DISABLED : SIGNUP_BUTTON_CLASS}
+                    disabled={loading}
+                    size="large"
+                >
                     {loading ? "Signing up..." : "Sign up"}
-                </button>
+                </Button>
+
             </form>
             <p className={PARAGRAPH_CLASS}>
                 Already have an account?{" "}

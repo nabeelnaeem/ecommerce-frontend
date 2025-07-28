@@ -5,6 +5,7 @@ import { loginUser } from "../../api/auth-service";
 import { useAuth } from "../../context/AuthContext.jsx";
 import InputField from "../../components/InputField.jsx";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from 'antd';
 
 const CONTAINER_DIV_CLASS = "max-w-md mx-auto p-6";
 const TITLE_CLASS = "text-xl font-semibold mb-4";
@@ -67,10 +68,17 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-
-                <button type="submit" className={loading ? LOGIN_BUTTON_CLASS_DISABLED : LOGIN_BUTTON_CLASS} disabled={loading}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className={loading ? LOGIN_BUTTON_CLASS_DISABLED : LOGIN_BUTTON_CLASS}
+                    disabled={loading}
+                    size="large"
+                >
                     {loading ? "Logging in..." : "Login"}
-                </button>
+                </Button>
+
             </form>
 
             <p className={PARAGRAPH_CLASS}>

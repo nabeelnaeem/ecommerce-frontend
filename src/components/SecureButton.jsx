@@ -1,15 +1,12 @@
 import { Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Button } from 'antd';
 
-const BASE_BUTTON_CLASSES =
-    "w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg transition-all transform shadow-lg";
-const ENABLED_HOVER_CLASSES =
-    "hover:scale-105 hover:from-indigo-700 hover:to-purple-700";
-const DISABLED_CLASSES = "opacity-50 cursor-not-allowed";
+const BUTTON_CLASS =
+    "w-full py-4 rounded-xl font-semibold text-lg transition-all transform shadow-lg bg-[linear-gradient(135deg,#6253e1,#04befe)] text-white hover:bg-[linear-gradient(135deg,#4c3bb8,#0393cb)]";
 
-const INNER_CONTAINER_CLASSES = "flex items-center justify-center space-x-2";
 const LOCK_ICON_CLASSES = "w-5 h-5";
+const INNER_CONTAINER_CLASSES = "flex items-center justify-center space-x-2";
 
 const SecureButton = ({
     label = "Secure Checkout",
@@ -19,9 +16,6 @@ const SecureButton = ({
     disabled = false,
     spinner = false,
 }) => {
-    const className = `${BASE_BUTTON_CLASSES} ${disabled ? DISABLED_CLASSES : ENABLED_HOVER_CLASSES
-        }`;
-
     const content = (
         <div className={INNER_CONTAINER_CLASSES}>
             {icon}
@@ -32,20 +26,32 @@ const SecureButton = ({
     if (to && !disabled) {
         return (
             <Link to={to} className="block">
-                <div className={className}>{content}</div>
+                <Button
+                    type="primary"
+                    className={BUTTON_CLASS}
+                    icon={icon}
+                    size="large"
+                    block
+                >
+                    {label}
+                </Button>
             </Link>
         );
     }
 
     return (
-        <button
-            type="button"
-            className={className}
+        <Button
+            type="primary"
+            size="large"
+            block
+            icon={icon}
+            className={BUTTON_CLASS}
             onClick={onClick}
             disabled={disabled}
+            loading={spinner}
         >
-            {spinner ? (<><Spin />{content}</>) : content}
-        </button>
+            {label}
+        </Button>
     );
 };
 
