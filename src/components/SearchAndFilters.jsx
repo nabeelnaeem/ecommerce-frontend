@@ -19,6 +19,10 @@ const SearchAndFilters = ({
     setSortOrder,
     limit,
     setLimit,
+    stockFilter,
+    setStockFilter,
+    ratingFilter,
+    setRatingFilter,
     handleSearch
 }) => {
     return (
@@ -71,6 +75,28 @@ const SearchAndFilters = ({
                         <option value="24">24 per page</option>
                         <option value="48">48 per page</option>
                     </select>
+
+                    <select
+                        onChange={(e) => setStockFilter(e.target.value)}
+                        className={SELECT_CLASS}
+                    >
+                        <option value="">All Stock</option>
+                        <option value="in">In Stock</option>
+                        <option value="out">Out of Stock</option>
+                    </select>
+
+                    <select
+                        onChange={(e) => setRatingFilter(e.target.value)}
+                        className={SELECT_CLASS}
+                    >
+                        <option value="">All Ratings</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars & up</option>
+                        <option value="3">3 Stars & up</option>
+                        <option value="2">2 Stars & up</option>
+                        <option value="1">1 Star & up</option>
+                    </select>
+
                 </div>
             </div>
         </div>
