@@ -7,6 +7,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 import { useProductContext } from '../../context/ProductContext';
 import { fetchProductsFromApi } from '../../api/product-service.js';
 import { useCart } from '../../context/CartContext';
+import { useSearchParams } from "react-router-dom";
 
 //Classes
 const CONTAINER_CLASS = 'max-w-7xl mx-auto p-6';
@@ -26,15 +27,18 @@ const ProductsStore = () => {
     const { products, setProducts, totalProducts, setTotalProducts, totalPages, setTotalPages } = useProductContext();
     const { addToCart } = useCart();
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const pageParam = parseInt(searchParams.get("page")) || 1;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('name');
     const [sortOrder, setSortOrder] = useState('asc');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(pageParam);
     const [limit, setLimit] = useState(12);
     const [stockFilter, setStockFilter] = useState('');
     const [ratingFilter, setRatingFilter] = useState('');
+
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -68,11 +72,21 @@ const ProductsStore = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [currentPage, limit, sortBy, sortOrder, searchTerm, stockFilter, ratingFilter]);
+        setCurrentPage(pageParam);
+    }, [currentPage, limit, sortBy, sortOrder, searchTerm, stockFilter, ratingFilter, pageParam]);
 
     const handleSearch = (e) => {
         e.preventDefault();
         setCurrentPage(1);
+    };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        setSearchParams(prev => {
+            const newParams = new URLSearchParams(prev);
+            newParams.set("page", page);
+            return newParams;
+        });
     };
 
     const handleSortChange = (field) => {
@@ -145,7 +159,7 @@ const ProductsStore = () => {
                             totalPages={totalPages}
                             totalProducts={totalProducts}
                             limit={limit}
-                            onPageChange={setCurrentPage}
+                            onPageChange={handlePageChange}
                         />
                     )}
                 </>
