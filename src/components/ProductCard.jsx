@@ -60,7 +60,7 @@ const ProductCard = ({ product }) => {
                 <div className={PRODUCT_IMAGE_CONTAINER}>
                     <img
                         src={product.image_url
-                            ? `${STATIC_BASE_URL}/images/${product.image_url}`
+                            ? product.image_url
                             : `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
                         alt={product.name}
                         className={PRODUCT_IMAGE}

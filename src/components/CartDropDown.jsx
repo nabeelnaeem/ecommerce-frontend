@@ -79,7 +79,7 @@ const CartDropdown = () => {
                                     <li key={item.product_id} className={CART_ITEM_CLASS}>
                                         <img
                                             src={item.image_url
-                                                ? `${STATIC_BASE_URL}/images/${item.image_url}`
+                                                ? item.image_url
                                                 : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} className={CART_IMAGE_CLASS}
                                             alt={item.name}
                                         />

@@ -106,7 +106,7 @@ const OrderDetail = () => {
                             <div className={ITEM_IMAGE_CONTAINER}>
                                 <img
                                     src={item.image_url
-                                        ? `${STATIC_BASE_URL}/images/${item.image_url}`
+                                        ? item.image_url
                                         : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} alt={item.product_name}
                                     className={ITEM_IMAGE}
                                 />
