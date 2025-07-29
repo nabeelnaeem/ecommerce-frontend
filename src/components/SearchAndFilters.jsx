@@ -20,9 +20,9 @@ const SearchAndFilters = ({
     limit,
     setLimit,
     stockFilter,
-    setStockFilter,
     ratingFilter,
-    setRatingFilter,
+    handleStockChange,
+    handleRatingChange,
     handleSearch
 }) => {
     return (
@@ -77,7 +77,8 @@ const SearchAndFilters = ({
                     </select>
 
                     <select
-                        onChange={(e) => setStockFilter(e.target.value)}
+                        value={stockFilter}
+                        onChange={(e) => handleStockChange(e.target.value)}
                         className={SELECT_CLASS}
                     >
                         <option value="">All Stock</option>
@@ -86,7 +87,8 @@ const SearchAndFilters = ({
                     </select>
 
                     <select
-                        onChange={(e) => setRatingFilter(e.target.value)}
+                        value={ratingFilter}
+                        onChange={(e) => handleRatingChange(e.target.value)}
                         className={SELECT_CLASS}
                     >
                         <option value="">All Ratings</option>

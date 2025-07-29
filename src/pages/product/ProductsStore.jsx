@@ -29,15 +29,22 @@ const ProductsStore = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const pageParam = parseInt(searchParams.get("page")) || 1;
+    const nameParam = searchParams.get("name") || '';
+    const sortByParam = searchParams.get("sortBy") || 'name';
+    const sortOrderParam = searchParams.get("sortOrder") || 'asc';
+    const limitParam = parseInt(searchParams.get("limit")) || 12;
+    const stockParam = searchParams.get("stock") || '';
+    const ratingParam = searchParams.get("rating") || '';
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [sortBy, setSortBy] = useState('name');
-    const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(pageParam);
-    const [limit, setLimit] = useState(12);
-    const [stockFilter, setStockFilter] = useState('');
-    const [ratingFilter, setRatingFilter] = useState('');
+    const [searchTerm, setSearchTerm] = useState(nameParam);
+    const [sortBy, setSortBy] = useState(sortByParam);
+    const [sortOrder, setSortOrder] = useState(sortOrderParam);
+    const [limit, setLimit] = useState(limitParam);
+    const [stockFilter, setStockFilter] = useState(stockParam);
+    const [ratingFilter, setRatingFilter] = useState(ratingParam);
+
 
 
     const fetchProducts = async () => {
@@ -71,12 +78,51 @@ const ProductsStore = () => {
     };
 
     useEffect(() => {
+        const page = parseInt(searchParams.get("page")) || 1;
+        const name = searchParams.get("name") || '';
+        const sortByVal = searchParams.get("sortBy") || 'name';
+        const sortOrderVal = searchParams.get("sortOrder") || 'asc';
+        const limitVal = parseInt(searchParams.get("limit")) || 12;
+        const stock = searchParams.get("stock") || '';
+        const rating = searchParams.get("rating") || '';
+
+        setCurrentPage(page);
+        setSearchTerm(name);
+        setSortBy(sortByVal);
+        setSortOrder(sortOrderVal);
+        setLimit(limitVal);
+        setStockFilter(stock);
+        setRatingFilter(rating);
+    }, [searchParams]);
+
+    useEffect(() => {
+        const params = new URLSearchParams();
+
+        if (searchTerm) params.set("name", searchTerm);
+        if (sortBy) params.set("sortBy", sortBy);
+        if (sortOrder) params.set("sortOrder", sortOrder);
+        if (limit) params.set("limit", limit);
+        if (stockFilter) params.set("stock", stockFilter);
+        if (ratingFilter) params.set("rating", ratingFilter);
+        if (currentPage !== 1) params.set("page", currentPage);
+
+        setSearchParams(params);
+
         fetchProducts();
-        setCurrentPage(pageParam);
-    }, [currentPage, limit, sortBy, sortOrder, searchTerm, stockFilter, ratingFilter, pageParam]);
+    }, [currentPage, limit, sortBy, sortOrder, searchTerm, stockFilter, ratingFilter]);
 
     const handleSearch = (e) => {
         e.preventDefault();
+        setCurrentPage(1);
+    };
+
+    const handleStockChange = (value) => {
+        setStockFilter(value);
+        setCurrentPage(1);
+    };
+
+    const handleRatingChange = (value) => {
+        setRatingFilter(value);
         setCurrentPage(1);
     };
 
@@ -89,15 +135,7 @@ const ProductsStore = () => {
         });
     };
 
-    const handleSortChange = (field) => {
-        if (sortBy === field) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-        } else {
-            setSortBy(field);
-            setSortOrder('asc');
-        }
-        setCurrentPage(1);
-    };
+
 
     return (
         <div className={CONTAINER_CLASS}>
@@ -122,6 +160,8 @@ const ProductsStore = () => {
                 ratingFilter={ratingFilter}
                 setRatingFilter={setRatingFilter}
                 handleSearch={handleSearch}
+                handleStockChange={handleStockChange}
+                handleRatingChange={handleRatingChange}
             />
 
 
