@@ -70,7 +70,7 @@ const PaginationControls = ({
                                 >
                                     1
                                 </button>
-                                {currentPage > 4 && (
+                                {currentPage > 3 && (
                                     <span className={ELLIPSIS_STYLE}>...</span>
                                 )}
                             </>
@@ -86,7 +86,7 @@ const PaginationControls = ({
                             </button>
                         ))}
 
-                        {currentPage < totalPages - 2 && (
+                        {currentPage < totalPages - 3 && (
                             <>
                                 {currentPage < totalPages - 3 && (
                                     <span className={ELLIPSIS_STYLE}>...</span>
@@ -118,7 +118,7 @@ const PaginationControls = ({
                 </div>
 
                 {/* Page Jump */}
-                <div className={PAGE_JUMP_CONTAINER}>
+                {/* <div className={PAGE_JUMP_CONTAINER}>
                     <span className={PAGE_INFO_TEXT}>Go to page:</span>
                     <input
                         type="number"
@@ -134,7 +134,7 @@ const PaginationControls = ({
                         className={PAGE_INPUT}
                     />
                     <span className={PAGE_INFO_TEXT}>of {totalPages}</span>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -5,12 +5,14 @@ import InputField from "../../components/InputField.jsx";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from 'antd';
 
 // Class Constants
 const CONTAINER_DIV_CLASS = "max-w-md mx-auto p-6";
 const TITLE_CLASS = "text-xl font-semibold mb-4";
 const FORM_CLASS = "space-y-4";
-const SIGNUP_BUTTON_CLASS = "w-full bg-green-600 text-white py-2 rounded hover:bg-green-500";
+const SIGNUP_BUTTON_CLASS = "w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 cursor-pointer";
+const SIGNUP_BUTTON_CLASS_DISABLED = "w-full bg-green-800 text-white py-2 rounded hover:bg-green-800";
 const PARAGRAPH_CLASS = "mt-4 text-center";
 const LOGIN_LINK_CLASS = "text-blue-600 hover:underline";
 
@@ -22,6 +24,7 @@ const Signup = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { login } = useAuth();
@@ -33,9 +36,11 @@ const Signup = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         if (!usernameValidation.test(username)) {
             toast.error(USERNAME_VALIDATION_MSG);
+            setLoading(false);
             return;
         }
 
@@ -56,6 +61,7 @@ const Signup = () => {
         } catch (error) {
             const errMsg = error?.response?.data?.error || SIGNUP_FAILED_MSG;
             toast.error(errMsg);
+            setLoading(false);
         }
     };
 
@@ -68,22 +74,33 @@ const Signup = () => {
                     placeholder="User Name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                 />
                 <InputField
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                 />
                 <InputField
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
-                <button type="submit" className={SIGNUP_BUTTON_CLASS}>
-                    Create Account
-                </button>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className={loading ? SIGNUP_BUTTON_CLASS_DISABLED : SIGNUP_BUTTON_CLASS}
+                    disabled={loading}
+                    size="large"
+                >
+                    {loading ? "Signing up..." : "Sign up"}
+                </Button>
+
             </form>
             <p className={PARAGRAPH_CLASS}>
                 Already have an account?{" "}

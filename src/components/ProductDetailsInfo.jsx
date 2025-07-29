@@ -2,6 +2,8 @@ import RenderStars from './RenderStars.jsx';
 import { ShoppingCart, Truck, Shield, RotateCcw, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { toast } from "react-toastify";
+import { useState } from 'react';
+import { Spin } from "antd";
 
 // Layout & Spacing
 const SPACE_Y_6 = 'space-y-6';
@@ -28,8 +30,8 @@ const RATING_CONTAINER = 'flex items-center gap-4 mb-4 mt-4';
 const QUANTITY_CONTROL = 'flex items-center border-2 border-gray-300 rounded-lg';
 const QUANTITY_BUTTON = 'p-2 hover:bg-gray-100 transition-colors';
 const ADD_TO_CART_BASE = 'flex-1 py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2';
-const ADD_TO_CART_DISABLED = 'bg-gray-300 text-gray-600 cursor-not-allowed';
-const ADD_TO_CART_ACTIVE = 'bg-blue-600 text-white hover:bg-blue-700';
+const ADD_TO_CART_DISABLED = 'bg-white text-blue-500 cursor-not-allowed';
+const ADD_TO_CART_ACTIVE = 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer';
 const FEATURES_CONTAINER = 'bg-gray-50 p-6 rounded-lg';
 const FEATURE_ITEM = 'flex items-center gap-3';
 const FEATURE_ICON = 'text-blue-600';
@@ -40,6 +42,24 @@ const ProductDetailsInfo = ({
     handleQuantityChange
 }) => {
     const { addToCart } = useCart();
+    const [adding, setAdding] = useState(false);
+
+    const existingItem = JSON.parse(localStorage.getItem('cart'))?.find(item => item.product_id === product.product_id);
+    const alreadyInCartQty = existingItem ? existingItem.quantity : 0;
+    const totalRequested = alreadyInCartQty + quantity;
+    const isOutOfStock = product.stock === 0 || totalRequested > product.stock;
+
+    const handleAddToCart = () => {
+        if (isOutOfStock) {
+            toast.error('Not enough products in stock');
+            return;
+        }
+
+        setAdding(true);
+        addToCart(product, quantity);
+        toast.success(`${product.name} (x${quantity}) added to your cart`);
+        setTimeout(() => setAdding(false), 300);
+    };
 
     return (
         <div className={SPACE_Y_6}>
@@ -70,6 +90,7 @@ const ProductDetailsInfo = ({
                         <button
                             onClick={() => handleQuantityChange(-1)}
                             className={QUANTITY_BUTTON}
+                            disabled={quantity <= 1}
                         >
                             <Minus size={16} />
                         </button>
@@ -77,7 +98,7 @@ const ProductDetailsInfo = ({
                         <button
                             onClick={() => handleQuantityChange(1)}
                             className={QUANTITY_BUTTON}
-                            disabled={quantity >= product.stock}
+                            disabled={totalRequested >= product.stock}
                         >
                             <Plus size={16} />
                         </button>
@@ -86,27 +107,21 @@ const ProductDetailsInfo = ({
 
                 <div className={FLEX_GAP_4}>
                     <button
-                        onClick={() => {
-                            const existingItem = JSON.parse(localStorage.getItem('cart'))?.find(item => item.product_id === product.product_id);
-                            const alreadyInCartQty = existingItem ? existingItem.quantity : 0;
-                            const totalRequested = alreadyInCartQty + quantity;
-
-                            if (totalRequested > product.stock) {
-                                toast.error('Not enough products in stock');
-                                return;
-                            }
-
-                            addToCart(product, quantity);
-                            toast.success(`${product.name} (x${quantity}) added to your cart`);
-                        }}
-                        disabled={product.stock === 0 || quantity > product.stock}
-                        className={`${ADD_TO_CART_BASE} ${product.stock === 0 || quantity > product.stock
-                            ? ADD_TO_CART_DISABLED
-                            : ADD_TO_CART_ACTIVE
-                            }`}
+                        onClick={handleAddToCart}
+                        disabled={isOutOfStock || adding}
+                        className={`${ADD_TO_CART_BASE} ${isOutOfStock || adding ? ADD_TO_CART_DISABLED : ADD_TO_CART_ACTIVE}`}
                     >
-                        <ShoppingCart size={20} />
-                        Add to Cart
+                        {adding ? (
+                            <>
+                                <Spin />
+                                <span className="ml-2">Adding...</span>
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart size={20} />
+                                <span className="ml-2">Add to Cart</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 import { Receipt } from 'lucide-react';
 import OrderPageHeader from '../../components/OrderPageHeader';
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
 // Classname Constants
 const PAGE_CLASS = "min-h-screen bg-gray-50";
 const CONTAINER_CLASS = "max-w-5xl mx-auto px-4 py-10 space-y-10";
@@ -23,6 +24,7 @@ const ITEM_DETAILS_CONTAINER = '';
 const ITEM_NAME = 'font-medium text-gray-800';
 const ITEM_QUANTITY = 'text-sm text-gray-500';
 const ITEM_PRICE = 'font-semibold text-gray-800 text-right';
+const REVIEW_LINK_CLASS = "text-indigo-600 hover:underline";
 // Toast Message Constants
 const FAILED_ORDER_LOAD_MESSAGE = "⚠️ Failed to load order details";
 
@@ -87,7 +89,7 @@ const OrderDetail = () => {
                 {/* ✅ Order Info */}
                 <div className={SECTION_CLASS}>
                     <h2 className={SECTION_TITLE_CLASS}>🧾 Order Summary</h2>
-                    <div className={ROW_CLASS}><span className={LABEL_CLASS}>Order ID</span><span className={VALUE_CLASS}>#{order.order_id}</span></div>
+                    <div className={ROW_CLASS}><span className={LABEL_CLASS}>Order ID</span><span className={VALUE_CLASS}>ORD-{order.order_id.slice(0, 8).toUpperCase()}</span></div>
                     <div className={ROW_CLASS}><span className={LABEL_CLASS}>Status</span>
                         <span className={`${VALUE_CLASS}`}>
                             <span className={STATUS_BADGE_CLASS}>{order.status}</span>
@@ -104,13 +106,20 @@ const OrderDetail = () => {
                         <div key={item.product_id} className={ITEM_CONTAINER}>
                             <div className={ITEM_IMAGE_CONTAINER}>
                                 <img
-                                    src={item.image || `https://placehold.co/100x100?text=${encodeURIComponent(item.product_name)}`}
-                                    alt={item.product_name}
+                                    src={item.image_url
+                                        ? item.image_url
+                                        : `https://placehold.co/300x300?text=${encodeURIComponent(item.name)}`} alt={item.product_name}
                                     className={ITEM_IMAGE}
                                 />
                                 <div className={ITEM_DETAILS_CONTAINER}>
                                     <p className={ITEM_NAME}>{item.product_name}</p>
                                     <p className={ITEM_QUANTITY}>Qty: {item.quantity}</p>
+                                    <Link
+                                        to={`/products/${item.product_id}#reviews`}
+                                        className={REVIEW_LINK_CLASS}
+                                    >
+                                        Rate this item
+                                    </Link>
                                 </div>
                             </div>
                             <span className={ITEM_PRICE}>Rs {item.amount.toFixed(2)}</span>

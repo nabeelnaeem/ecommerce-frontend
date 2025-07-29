@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { logoutUser, refreshTokenAccess } from "../api/auth-service.js";
 
 const REFRESH_REQUEST_TIMER = 5; // If expire time is less than these seconds, refresh request will be sent
-const CHECK_INTERVAL = 5 * 1000; // a * 1000 a seconds
+const CHECK_INTERVAL = 5 * 1000; // a * 1000 (a) seconds, interval after which the check runs
+
+const SESSION_EXPIRED_MSG = "🔒 Session expired. Please log in again.";
+const LOGIN_API_FAILED_MSG = "Logout API failed:";
 
 const AuthContext = createContext({
     user: null,
@@ -32,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logoutAndNotify = async () => {
-        toast.error("🔒 Session expired. Please log in again.");
+        toast.error(SESSION_EXPIRED_MSG);
         setTimeout(() => {
             clearAuth();
         }, 1500);
@@ -43,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         try {
             await logoutUser();
         } catch (error) {
-            console.log("Logout API failed:", error);
+            console.log(LOGIN_API_FAILED_MSG, error);
         } finally {
             clearAuth();
         }
@@ -77,7 +80,6 @@ export const AuthProvider = ({ children }) => {
                 const currentTime = Date.now() / 1000;
                 const timeLeft = decoded.exp - currentTime;
 
-                // Refresh if less than 60 seconds left
                 if (timeLeft < REFRESH_REQUEST_TIMER) {
                     const newToken = await refreshTokenAccess();
                     localStorage.setItem("accessToken", newToken);
@@ -94,7 +96,7 @@ export const AuthProvider = ({ children }) => {
             } catch {
                 logoutAndNotify();
             }
-        }, CHECK_INTERVAL); //checks every 1 mins
+        }, CHECK_INTERVAL);
     };
 
     const setupStorageListener = () => {

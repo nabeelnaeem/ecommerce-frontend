@@ -5,11 +5,13 @@ import { loginUser } from "../../api/auth-service";
 import { useAuth } from "../../context/AuthContext.jsx";
 import InputField from "../../components/InputField.jsx";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from 'antd';
 
 const CONTAINER_DIV_CLASS = "max-w-md mx-auto p-6";
 const TITLE_CLASS = "text-xl font-semibold mb-4";
 const FORM_CLASS = "space-y-4";
-const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500 transition-colors";
+const LOGIN_BUTTON_CLASS = "w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500 transition-colors cursor-pointer";
+const LOGIN_BUTTON_CLASS_DISABLED = "w-full bg-blue-800 text-white py-2 rounded hover:bg-blue-800 transition-colors";
 const PARAGRAPH_CLASS = "mt-4 text-center";
 const SIGNUP_LINK_CLASS = "text-blue-600 hover:underline";
 
@@ -20,26 +22,29 @@ const DONT_HAVE_ACCOUNT_MSG = "Don't have an account?";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { login } = useAuth();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const from = params.get("from") || "/";
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const { accessToken, user } = await loginUser({ username, password });
             localStorage.setItem("accessToken", accessToken);
-            login(user); // Update context
+            login(user);
             toast.success(LOGIN_SUCCESS_MSG);
-            // Redirect after short delay
             setTimeout(() => {
                 navigate(from, { replace: true });
             }, 1200);
         } catch (err) {
             const errorMessage = err?.response?.data?.error || LOGIN_FAILED_MSG;
             toast.error(errorMessage);
+            setLoading(false);
         }
     };
 
@@ -63,17 +68,23 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className={loading ? LOGIN_BUTTON_CLASS_DISABLED : LOGIN_BUTTON_CLASS}
+                    disabled={loading}
+                    size="large"
+                >
+                    {loading ? "Logging in..." : "Login"}
+                </Button>
 
-                <button type="submit" className={LOGIN_BUTTON_CLASS}>
-                    Login
-                </button>
             </form>
 
             <p className={PARAGRAPH_CLASS}>
                 {DONT_HAVE_ACCOUNT_MSG}{" "}
                 <Link to="/signup" className={SIGNUP_LINK_CLASS}>Sign up</Link>
             </p>
-            {/* <ToastContainer position="top-center" autoClose={1500} /> */}
         </div>
     );
 };

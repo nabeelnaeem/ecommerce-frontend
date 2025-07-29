@@ -3,9 +3,9 @@ const RECEIPT_PHONE_MSG = 'Send the recipet to 03058912118 with Order ID'
 const PaymentMethods = ({ selectedMethod, setSelectedMethod }) => {
     const methods = [
         { id: 'easypaisa', name: 'Easypaisa', icon: '📱', info: `Pay using your Easypaisa mobile account. EASYPAISA ACCOUNT # 0000000000` },
-        { id: 'jazzcash', name: 'JazzCash', icon: '💳', info: `Pay using your Easypaisa mobile account. JAZZCASH ACCOUNT # 0000000000` },
+        { id: 'jazzcash', name: 'JazzCash', icon: '💳', info: `Pay using your JAZZCASH mobile account. JAZZCASH ACCOUNT # 0000000000` },
         { id: 'cash_on_delivery', name: 'Cash on Delivery', icon: '💵', info: 'Pay with cash when the order arrives.' },
-        { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦', info: `Pay using your Easypaisa mobile account. HBL, ACCOUNT# 0000000000` }
+        { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦', info: `Directly transfer to our bank account. (HBL, ACCOUNT# 0000000000)` }
     ];
 
     const selectedInfo = methods.find(m => m.id === selectedMethod)?.info;

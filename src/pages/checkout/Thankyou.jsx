@@ -47,7 +47,7 @@ const ThankYou = () => {
                                 to={`/orders/${order_id}`}
                                 className="text-blue-600 hover:underline break-all"
                             >
-                                {order_id} <br></br>(Click for Details)
+                                ORD-{order_id.slice(0, 8).toUpperCase()}  (Details here)
                             </Link></div>
                     </div>
                     <div>

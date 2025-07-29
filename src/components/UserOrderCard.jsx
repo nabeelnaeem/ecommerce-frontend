@@ -26,7 +26,7 @@ const UserOrderCard = ({ order }) => {
                 <div className={TABLE_CLASS}>
                     <div className={ROW_CLASS}>
                         <span className={LABEL_CLASS}>Order ID</span>
-                        <span className={VALUE_CLASS}>#{order_id}</span>
+                        <span className={VALUE_CLASS}>ORD-{order_id.slice(0, 8).toUpperCase()}</span>
                     </div>
 
                     <div className={ROW_CLASS}>

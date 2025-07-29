@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { useRef } from 'react';
 import { fetchProductById } from '../../api/product-service.js';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -9,6 +10,9 @@ import { checkIfPurchase, submitProductReview, updateProductReview } from '../..
 import { useAuth } from '../../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
 import OrderPageHeader from '../../components/OrderPageHeader.jsx';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
 
 // Layout & Spacing
 const MAX_WIDTH_CONTAINER = 'max-w-7xl mx-auto px-4 py-8';
@@ -23,7 +27,7 @@ const PADDING_Y_8 = 'py-8';
 const TEXT_CENTER = 'text-center';
 
 // Component Styles
-const IMAGE_STYLE = 'w-full h-96 lg:h-[400px] object-cover rounded-lg';
+const IMAGE_STYLE = 'w-full h-96 lg:h-[500px] object-cover rounded-lg';
 const TAB_CONTAINER = 'border-b border-gray-200';
 const TAB_BUTTON_BASE = 'py-4 px-1 border-b-2 font-medium text-sm transition-colors';
 const TAB_BUTTON_ACTIVE = 'py-4 px-1 border-b-2 font-medium text-sm transition-colors border-blue-500 text-blue-600';
@@ -62,6 +66,8 @@ const ProductDetail = () => {
     const [selectedRating, setSelectedRating] = useState(0);
     const [reviewVersion, setReviewVersion] = useState(0);
     const { isAuthenticated } = useAuth();
+    const location = useLocation();
+    const reviewsRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -93,8 +99,14 @@ const ProductDetail = () => {
             if (isAuthenticated) {
                 verifyPurchase();
             }
+            if (location.hash === '#reviews') {
+                setActiveTab('reviews');
+                setTimeout(() => {
+                    reviewsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
         }
-    }, [id, isAuthenticated]);
+    }, [id, isAuthenticated, location.hash]);
 
     if (loading) return <LoadingIndicator />;
     if (error) return <ErrorMessage error={error} />;
@@ -169,8 +181,9 @@ const ProductDetail = () => {
             <div className={GRID_LAYOUT}>
                 <div className={SPACE_Y_4}>
                     <img
-                        src={product.image || `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`}
-                        alt={product.name}
+                        src={product.image_url
+                            ? product.image_url
+                            : `https://placehold.co/300x300?text=${encodeURIComponent(product.name)}`} alt={product.name}
                         className={IMAGE_STYLE}
                     />
                 </div>
@@ -206,7 +219,7 @@ const ProductDetail = () => {
                     )}
 
                     {activeTab === 'reviews' && (
-                        <>
+                        <div ref={reviewsRef}>
                             <ReviewsDisplay
                                 key={reviewVersion}
                                 rating={product.rating}
@@ -244,7 +257,7 @@ const ProductDetail = () => {
                                     </form>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
