@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { useRef } from 'react';
 import { fetchProductById } from '../../api/product-service.js';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -65,6 +66,8 @@ const ProductDetail = () => {
     const [selectedRating, setSelectedRating] = useState(0);
     const [reviewVersion, setReviewVersion] = useState(0);
     const { isAuthenticated } = useAuth();
+    const location = useLocation();
+    const reviewsRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -96,8 +99,14 @@ const ProductDetail = () => {
             if (isAuthenticated) {
                 verifyPurchase();
             }
+            if (location.hash === '#reviews') {
+                setActiveTab('reviews');
+                setTimeout(() => {
+                    reviewsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
         }
-    }, [id, isAuthenticated]);
+    }, [id, isAuthenticated, location.hash]);
 
     if (loading) return <LoadingIndicator />;
     if (error) return <ErrorMessage error={error} />;
@@ -210,7 +219,7 @@ const ProductDetail = () => {
                     )}
 
                     {activeTab === 'reviews' && (
-                        <>
+                        <div ref={reviewsRef}>
                             <ReviewsDisplay
                                 key={reviewVersion}
                                 rating={product.rating}
@@ -248,7 +257,7 @@ const ProductDetail = () => {
                                     </form>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
                 </div>
             </div>

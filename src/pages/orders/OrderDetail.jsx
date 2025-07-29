@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 import { Receipt } from 'lucide-react';
@@ -24,6 +24,7 @@ const ITEM_DETAILS_CONTAINER = '';
 const ITEM_NAME = 'font-medium text-gray-800';
 const ITEM_QUANTITY = 'text-sm text-gray-500';
 const ITEM_PRICE = 'font-semibold text-gray-800 text-right';
+const REVIEW_LINK_CLASS = "text-indigo-600 hover:underline";
 // Toast Message Constants
 const FAILED_ORDER_LOAD_MESSAGE = "⚠️ Failed to load order details";
 
@@ -113,6 +114,12 @@ const OrderDetail = () => {
                                 <div className={ITEM_DETAILS_CONTAINER}>
                                     <p className={ITEM_NAME}>{item.product_name}</p>
                                     <p className={ITEM_QUANTITY}>Qty: {item.quantity}</p>
+                                    <Link
+                                        to={`/products/${item.product_id}#reviews`}
+                                        className={REVIEW_LINK_CLASS}
+                                    >
+                                        Rate this item
+                                    </Link>
                                 </div>
                             </div>
                             <span className={ITEM_PRICE}>Rs {item.amount.toFixed(2)}</span>
