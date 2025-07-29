@@ -27,9 +27,10 @@ const VIEW_CART_LINK_CLASS = "mb-5 inline-flex items-center justify-center gap-2
 const CART_LINK_BUTTON = "w-full flex items-center justify-between px-4 py-3 rounded-lg shadow hover:shadow-md transition duration-200 font-semibold";
 const VIEW_CART_STYLE = "bg-gray-100 text-gray-700 hover:bg-gray-200";
 const CHECKOUT_STYLE = "bg-blue-600 text-white hover:bg-blue-700";
+const CLEAR_CART_CLASS = "underline cursor-pointer float-right text-blue-700";
 
 const CartDropdown = () => {
-    const { cart, removeFromCart, isCartOpen, toggleCart, closeCart } = useCart();
+    const { cart, removeFromCart, isCartOpen, toggleCart, closeCart, clearCart } = useCart();
     const dropdownRef = useRef(null);
 
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -97,6 +98,11 @@ const CartDropdown = () => {
                                 ))}
                             </ul>
                         )}
+                        {
+                            cart.length !== 0 ? (<button className={CLEAR_CART_CLASS} onClick={() => clearCart()}>Clear Cart</button>)
+                                : <></>
+
+                        }
                     </div>
                 </div>
             )}
