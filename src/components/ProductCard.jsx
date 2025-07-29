@@ -11,7 +11,7 @@ const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
 const BUTTON_CLASS = "px-4 py-2 rounded-lg font-medium transition-colors";
 const BUTTON_PRIMARY = `${BUTTON_CLASS} bg-blue-600 text-white hover:bg-blue-700`;
 const BUTTON_DISABLED = `${BUTTON_CLASS} text-gray-400 cursor-not-allowed bg-gray-100`;
-const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow";
+const PRODUCT_CARD_CLASS = "bg-white rounded-lg shadow-xl drop-shadow-xl overflow-hidden hover:shadow-2xl hover:drop-shadow-xl/25 transition-shadow";
 const PRODUCT_IMAGE_CONTAINER = "aspect-w-1 aspect-h-1 bg-gray-200";
 const PRODUCT_IMAGE = "w-full h-60 object-cover";
 const PRODUCT_INFO_CONTAINER = "p-4";
@@ -85,7 +85,7 @@ const ProductCard = ({ product }) => {
                     </span>
                 </div>
 
-                {product.stock > 0 && (
+                {product.stock > 0 ? (
                     <div className={QUANTITY_CONTAINER}>
                         <span className={QUANTITY_LABEL}>Quantity:</span>
                         <div className={QUANTITY_SELECTOR}>
@@ -106,7 +106,28 @@ const ProductCard = ({ product }) => {
                             </button>
                         </div>
                     </div>
-                )}
+                ) :
+                    <div className={QUANTITY_CONTAINER}>
+                        <span className={QUANTITY_LABEL}>Quantity:</span>
+                        <div className={QUANTITY_SELECTOR}>
+                            <button
+                                onClick={() => handleQuantityChange(-1)}
+                                disabled
+                                className={`${QUANTITY_BUTTON} ${quantity <= 1 ? QUANTITY_BUTTON_DISABLED : QUANTITY_BUTTON_ENABLED}`}
+                            >
+                                -
+                            </button>
+                            <span className={QUANTITY_VALUE}>{quantity}</span>
+                            <button
+                                onClick={() => handleQuantityChange(1)}
+                                disabled
+                                className={`${QUANTITY_BUTTON} ${quantity + quantityInCart >= product.stock ? QUANTITY_BUTTON_DISABLED : QUANTITY_BUTTON_ENABLED}`}
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+                }
 
                 <div className={BUTTON_CONTAINER_CLASS}>
                     <button
