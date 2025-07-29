@@ -3,6 +3,7 @@ import { ShoppingCart } from 'lucide-react';
 import RenderStars from './RenderStars.jsx';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
+import { Spin } from "antd";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const STATIC_BASE_URL = API_BASE_URL.replace('/api', '');
@@ -110,11 +111,20 @@ const ProductCard = ({ product }) => {
                 <div className={BUTTON_CONTAINER_CLASS}>
                     <button
                         onClick={handleAddToCart}
-                        disabled={product.stock === 0 || quantity + quantityInCart > product.stock}
-                        className={`${ADD_TO_CART_BUTTON} ${product.stock > 0 && quantity + quantityInCart <= product.stock ? BUTTON_PRIMARY : BUTTON_DISABLED}`}
+                        disabled={product.stock === 0 || quantity + quantityInCart > product.stock || loading}
+                        className={`${ADD_TO_CART_BUTTON} ${product.stock > 0 && quantity + quantityInCart <= product.stock && !loading
+                            ? BUTTON_PRIMARY
+                            : BUTTON_DISABLED
+                            }`}
                     >
-                        <ShoppingCart className={SHOPPING_CART_ICON_CLASS} />
-                        {loading ? "Adding..." : "Add to cart"}
+                        {loading ? (
+                            <Spin />
+                        ) : (
+                            <>
+                                <ShoppingCart className={SHOPPING_CART_ICON_CLASS} />
+                                Add to cart
+                            </>
+                        )}
                     </button>
 
                     {quantityInCart > 0 && (

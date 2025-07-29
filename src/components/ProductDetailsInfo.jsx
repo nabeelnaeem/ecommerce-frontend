@@ -3,6 +3,7 @@ import { ShoppingCart, Truck, Shield, RotateCcw, Plus, Minus } from 'lucide-reac
 import { useCart } from '../context/CartContext';
 import { toast } from "react-toastify";
 import { useState } from 'react';
+import { Spin } from "antd";
 
 // Layout & Spacing
 const SPACE_Y_6 = 'space-y-6';
@@ -29,7 +30,7 @@ const RATING_CONTAINER = 'flex items-center gap-4 mb-4 mt-4';
 const QUANTITY_CONTROL = 'flex items-center border-2 border-gray-300 rounded-lg';
 const QUANTITY_BUTTON = 'p-2 hover:bg-gray-100 transition-colors';
 const ADD_TO_CART_BASE = 'flex-1 py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2';
-const ADD_TO_CART_DISABLED = 'bg-gray-700 text-white cursor-not-allowed';
+const ADD_TO_CART_DISABLED = 'bg-white text-blue-500 cursor-not-allowed';
 const ADD_TO_CART_ACTIVE = 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer';
 const FEATURES_CONTAINER = 'bg-gray-50 p-6 rounded-lg';
 const FEATURE_ITEM = 'flex items-center gap-3';
@@ -107,11 +108,20 @@ const ProductDetailsInfo = ({
                 <div className={FLEX_GAP_4}>
                     <button
                         onClick={handleAddToCart}
-                        disabled={isOutOfStock}
-                        className={`${ADD_TO_CART_BASE} ${isOutOfStock ? ADD_TO_CART_DISABLED : ADD_TO_CART_ACTIVE}`}
+                        disabled={isOutOfStock || adding}
+                        className={`${ADD_TO_CART_BASE} ${isOutOfStock || adding ? ADD_TO_CART_DISABLED : ADD_TO_CART_ACTIVE}`}
                     >
-                        <ShoppingCart size={20} />
-                        {adding ? "Adding..." : "Add to Cart"}
+                        {adding ? (
+                            <>
+                                <Spin />
+                                <span className="ml-2">Adding...</span>
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart size={20} />
+                                <span className="ml-2">Add to Cart</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
