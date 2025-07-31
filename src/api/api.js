@@ -1,12 +1,17 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { refreshTokenAccess } from './auth-service.js';
+
+const SESSION_END_MSG = "Your session has ended";
+const ACCESS_REVOKED_MSG = "Your access has been revoked";
+const SESSION_EXPIRED_MSG = "Session expired. Please log in again.";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true
+    withCredentials: true,
 });
 
 // Attach Authorization header if token exists
@@ -22,19 +27,35 @@ let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
-    failedQueue.forEach(queuedRequest => {
+    failedQueue.forEach(prom => {
         if (error) {
-            queuedRequest.reject(error);
+            prom.reject(error);
         } else {
-            queuedRequest.resolve(token);
+            prom.resolve(token);
         }
     });
-
     failedQueue = [];
 };
 
+const forceLogout = (message = SESSION_END_MSG) => {
+    localStorage.removeItem('accessToken');
+    toast.error(message);
+    setTimeout(() => {
+        window.location.href = '/login';
+    }, 1500);
+};
+
 api.interceptors.response.use(
-    response => response,
+    response => {
+        // 🔒 Check revoked user in successful response
+        if (response.data?.is_revoked) {
+            forceLogout(ACCESS_REVOKED_MSG);
+            return Promise.reject({ response: { data: { error: "Access revoked" } } });
+        }
+
+        return response;
+    },
+
     async error => {
         const originalRequest = error.config;
 
@@ -42,7 +63,7 @@ api.interceptors.response.use(
             originalRequest.url.includes('/auth/login') ||
             originalRequest.url.includes('/auth/signup');
 
-        // Skip refresh logic for login/signup failures
+        // 🔁 Handle expired access token
         if (error.response?.status === 401 && !originalRequest._retry && !isAuthRoute) {
             originalRequest._retry = true;
 
@@ -67,12 +88,20 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshErr) {
                 processQueue(refreshErr, null);
-                localStorage.removeItem('accessToken');
-                window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`;
+                if (refreshErr.response?.data?.is_revoked) {
+                    forceLogout(ACCESS_REVOKED_MSG);
+                } else {
+                    forceLogout(SESSION_EXPIRED_MSG);
+                }
                 return Promise.reject(refreshErr);
             } finally {
                 isRefreshing = false;
             }
+        }
+
+        // 🔒 If 403 and access is revoked explicitly
+        if (error.response?.status === 403 && error.response?.data?.is_revoked) {
+            forceLogout(ACCESS_REVOKED_MSG);
         }
 
         return Promise.reject(error);
