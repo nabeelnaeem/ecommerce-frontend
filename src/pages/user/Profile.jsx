@@ -3,7 +3,6 @@ import { User, Mail, Phone, MapPin, Edit3, Save, X } from 'lucide-react';
 import { fetchProfile, updateProfile } from '../../api/auth-service.js';
 import InputField from '../../components/InputField';
 
-// Text and class constants
 const TEXT = {
     PROFILE_TITLE: "User Profile",
     EDIT_PROFILE: "Edit Profile",
@@ -23,7 +22,7 @@ const TEXT = {
     PHONE_LABEL: "Phone Number",
     ADDRESS_LABEL: "Address",
     FULL_NAME_PLACEHOLDER: "Enter your full name",
-    PHONE_PLACEHOLDER: "Enter phone number",
+    PHONE_PLACEHOLDER: "03XX XXXXXXX",
     ADDRESS_PLACEHOLDER: "Enter your address",
 };
 const ICON_CLASS = "inline w-5 h-5 mr-2";
@@ -31,10 +30,10 @@ const ERROR_MESSAGES = {
     FULL_NAME_REQUIRED: "Full name is required",
     FULL_NAME_INVALID: "Only letters and spaces allowed",
     PHONE_REQUIRED: "Phone number is required",
-    PHONE_INVALID: "Phone number must be 7 to 15 digits",
+    PHONE_INVALID: "Phone number must be 11 digits and start with 03",
 };
 
-// CSS Class Constants
+// CSS Classes (unchanged for brevity)
 const PAGE_CONTAINER = "min-h-screen bg-gray-50 py-8 px-4";
 const CONTENT_CONTAINER = "max-w-2xl mx-auto";
 const CARD_STYLE = "bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6";
@@ -96,6 +95,7 @@ const Profile = () => {
     }, []);
 
     const handleEdit = () => setIsEditing(true);
+
     const handleCancel = () => {
         setEditData({
             full_name: userData.full_name || '',
@@ -121,7 +121,7 @@ const Profile = () => {
         if (!editData.phone.trim()) {
             newErrors.phone = ERROR_MESSAGES.PHONE_REQUIRED;
             isValid = false;
-        } else if (!/^[0-9]{7,15}$/.test(editData.phone)) {
+        } else if (!/^03\d{9}$/.test(editData.phone)) {
             newErrors.phone = ERROR_MESSAGES.PHONE_INVALID;
             isValid = false;
         }
@@ -134,7 +134,6 @@ const Profile = () => {
         if (!validateFields()) return;
 
         setIsSubmitting(true);
-
         const updated = {
             username: userData.username,
             full_name: editData.full_name,
@@ -159,16 +158,23 @@ const Profile = () => {
 
     const handleInputChange = (field, value) => {
         if (field === 'full_name' && /[0-9]/.test(value)) return;
-        if (field === 'phone' && (!/^[0-9]*$/.test(value) || value.length > 15)) return;
+
+        if (field === 'phone') {
+            const raw = value.replace(/\D/g, '').slice(0, 11); // Only digits
+            setEditData(prev => ({ ...prev, phone: raw }));
+            if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
+            return;
+        }
 
         setEditData(prev => ({ ...prev, [field]: value }));
-
-        if (errors[field]) {
-            setErrors(prev => ({ ...prev, [field]: '' }));
-        }
+        if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
     };
 
     const getInitial = (username) => username?.charAt(0).toUpperCase() || 'U';
+
+    const formatPhoneDisplay = (raw) => {
+        return raw.length === 11 ? `${raw.slice(0, 4)} ${raw.slice(4)}` : raw;
+    };
 
     if (!userData || !editData) {
         return (
@@ -193,11 +199,11 @@ const Profile = () => {
 
                     <div className={GRID_CONTAINER}>
                         <div>
-                            <label className={LABEL_STYLE}><User className={ICON_CLASS} />{TEXT.USERNAME_LABEL}</label>
+                            <label className={LABEL_STYLE}><User className="inline w-5 h-5 mr-2" />{TEXT.USERNAME_LABEL}</label>
                             <input type="text" value={userData.username} readOnly className={READONLY_INPUT} />
                         </div>
                         <div>
-                            <label className={LABEL_STYLE}><Mail className={ICON_CLASS} />{TEXT.EMAIL_LABEL}</label>
+                            <label className={LABEL_STYLE}><Mail className="inline w-5 h-5 mr-2" />{TEXT.EMAIL_LABEL}</label>
                             <input type="email" value={userData.email} readOnly className={READONLY_INPUT} />
                         </div>
                     </div>
@@ -225,7 +231,7 @@ const Profile = () => {
                                 <InputField
                                     type="tel"
                                     name="phone"
-                                    value={editData.phone}
+                                    value={formatPhoneDisplay(editData.phone)}
                                     onChange={(e) => handleInputChange('phone', e.target.value)}
                                     required
                                     placeholder={TEXT.PHONE_PLACEHOLDER}
@@ -250,7 +256,11 @@ const Profile = () => {
 
                         {isEditing ? (
                             <div className={BUTTON_GROUP_BOTTOM}>
-                                <button onClick={handleSave} disabled={isSubmitting} className={isSubmitting ? SAVE_BUTTON_DISABLED : SAVE_BUTTON}>
+                                <button
+                                    onClick={handleSave}
+                                    disabled={isSubmitting || errors.full_name || errors.phone}
+                                    className={isSubmitting || errors.full_name || errors.phone ? SAVE_BUTTON_DISABLED : SAVE_BUTTON}
+                                >
                                     {isSubmitting ? (
                                         <>
                                             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
