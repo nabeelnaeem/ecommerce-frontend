@@ -5,6 +5,8 @@ const InputField = ({
     id,
     value,
     onChange,
+    minLength,
+    maxLength,
     required = false,
     placeholder = '',
     error = '',
@@ -24,6 +26,8 @@ const InputField = ({
                 required={required}
                 placeholder={placeholder}
                 className={inputClass}
+                minLength={minLength}
+                maxLength={maxLength}
             />
             {error && <p className={errorClass}>{error}</p>}
         </div>
