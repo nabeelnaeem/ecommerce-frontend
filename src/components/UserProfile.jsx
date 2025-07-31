@@ -22,8 +22,9 @@ const UserProfile = ({ user, onLogout }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const location = useLocation();
+    const isLoginPage = location.pathname === "/login";
     const currentPath = location.pathname + location.search;
-    const loginLink = `/login?from=${encodeURIComponent(currentPath)}`
+    const loginLink = isLoginPage ? "/login" : `/login?from=${encodeURIComponent(currentPath)}`;
 
     useClickOutside(dropdownRef, () => setIsDropdownOpen(false), isDropdownOpen);
 
@@ -32,8 +33,17 @@ const UserProfile = ({ user, onLogout }) => {
     }, [user]);
 
     if (!user) {
+        const isLoginPage = location.pathname === "/login";
+
         return (
-            <Link to={loginLink} className={LOGIN_BUTTON_CLASS}>
+            <Link
+                to={isLoginPage ? "#" : loginLink}
+                className={`${LOGIN_BUTTON_CLASS} ${isLoginPage ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+                aria-disabled={isLoginPage}
+                onClick={(e) => {
+                    if (isLoginPage) e.preventDefault();
+                }}
+            >
                 <User className={LOGIN_ICON_CLASS} />
                 <span>Login</span>
             </Link>
