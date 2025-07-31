@@ -112,8 +112,9 @@ const Checkout = () => {
             <OrderPageHeader
                 title="Checkout"
                 icon={<CreditCard />}
-                backText="Back to Cart"
-                onBackClick={() => window.history.back()}
+                backText="Cart Details"
+                onBackClick={() => navigate("/cart")}
+
             />
             <div className={CONTAINER_CLASSES}>
                 <div className={GRID_CLASSES}>
