@@ -83,7 +83,9 @@ const Login = () => {
 
             <p className={PARAGRAPH_CLASS}>
                 {DONT_HAVE_ACCOUNT_MSG}{" "}
-                <Link to="/signup" className={SIGNUP_LINK_CLASS}>Sign up</Link>
+                <Link to={`/signup?from=${encodeURIComponent(from)}`} className={SIGNUP_LINK_CLASS}>
+                    Sign up
+                </Link>
             </p>
         </div>
     );

@@ -74,6 +74,7 @@ const Signup = () => {
                     placeholder="User Name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    minLength={6}
                     required
                 />
                 <InputField
@@ -87,6 +88,7 @@ const Signup = () => {
                     type="password"
                     placeholder="Password"
                     value={password}
+                    minLength={8}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />

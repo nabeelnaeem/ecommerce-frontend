@@ -72,7 +72,8 @@ const Checkout = () => {
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const total = subtotal + shipping;
-    const isFormValid = formData.fullName && formData.phone && formData.address && cart.length > 0;
+    const isPhoneValid = /^03\d{9}$/.test(formData.phone);
+    const isFormValid = formData.fullName && isPhoneValid && formData.address && cart.length > 0;
 
     const handleSubmit = async () => {
         if (!isFormValid) {
@@ -112,8 +113,9 @@ const Checkout = () => {
             <OrderPageHeader
                 title="Checkout"
                 icon={<CreditCard />}
-                backText="Back to Cart"
-                onBackClick={() => window.history.back()}
+                backText="Cart Details"
+                onBackClick={() => navigate("/cart")}
+
             />
             <div className={CONTAINER_CLASSES}>
                 <div className={GRID_CLASSES}>

@@ -23,7 +23,28 @@ const UserProfile = ({ user, onLogout }) => {
     const dropdownRef = useRef(null);
     const location = useLocation();
     const currentPath = location.pathname + location.search;
-    const loginLink = `/login?from=${encodeURIComponent(currentPath)}`
+
+    const storedFrom = sessionStorage.getItem("loginFrom");
+    const isLoginPage = location.pathname === "/login";
+
+    let fromPath;
+
+    if (isLoginPage) {
+        const params = new URLSearchParams(location.search);
+        const urlFrom = params.get("from");
+
+        if (urlFrom) {
+            sessionStorage.setItem("loginFrom", urlFrom);
+            fromPath = urlFrom;
+        } else {
+            fromPath = storedFrom || "/";
+        }
+    } else {
+        sessionStorage.setItem("loginFrom", currentPath);
+        fromPath = currentPath;
+    }
+
+    const loginLink = `/login?from=${encodeURIComponent(fromPath)}`;
 
     useClickOutside(dropdownRef, () => setIsDropdownOpen(false), isDropdownOpen);
 
