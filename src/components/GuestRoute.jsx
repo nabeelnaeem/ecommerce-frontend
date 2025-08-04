@@ -1,18 +1,26 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const GuestRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
-    if (loading) return null;
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            const params = new URLSearchParams(location.search);
+            const from = params.get("from");
 
-    if (isAuthenticated) {
-        // Extract ?from=... from URL
-        const params = new URLSearchParams(location.search);
-        const from = params.get("from") || "/";
-        return <Navigate to={from} replace />;
-    }
+            if (from) {
+                navigate(from, { replace: true });
+            } else {
+                navigate(-1); // fallback to previous page
+            }
+        }
+    }, [isAuthenticated, loading, location.search, navigate]);
+
+    if (loading || isAuthenticated) return null;
 
     return children;
 };
